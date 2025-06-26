@@ -157,7 +157,6 @@
     </style>
 </head>
 <body>
-    <!-- O HTML do body continua o mesmo -->
     <div id="login-screen">
         <h1>Acesso ao Sistema de Boletins</h1>
         <label for="usuario">Usuário:</label>
@@ -173,8 +172,7 @@
             <img src="rjlogob.png" />
             <div class="header-text">
                 <h1>Polícia Militar do Estado do Rio de Janeiro</h1>
-                <div class="sub-info">Sistema Integrado de Boletins de Ocorrência<br>
-                Desenvolvido por LipeDEV (Noah VeraCruz)</div>
+                <div class="sub-info">Sistema Integrado de Boletins de Ocorrência</div>
             </div>
             <img src="pmerje.png" />
         </header>
@@ -290,91 +288,74 @@
         const mainScreens = ['tela-boas-vindas', 'formulario', 'lista', 'tela-gerenciamento'];
         
         // --- INÍCIO DA SEÇÃO DE LOGS PARA O DISCORD ---
-
         const webhookUrl = "https://discord.com/api/webhooks/1387910467388969061/C-OfGNaaN37BGdu8MP1TxTXbKLoOtn3B3BoZ7lDMNJEP-E_kh0tn5yi-FFXNCQy5xYUm";
+        const logColors = { SUCCESS: 3066993, DANGER: 15158332, WARNING: 16776960, INFO: 3447003 };
 
-        const logColors = {
-            SUCCESS: 3066993,  // Verde
-            DANGER: 15158332,  // Vermelho
-            WARNING: 16776960, // Amarelo
-            INFO: 3447003,     // Azul
-        };
-
-        /**
-         * Envia um log formatado para um webhook do Discord.
-         * @param {string} title - O título da ação (ex: "Novo Boletim Criado").
-         * @param {string} description - A descrição detalhada da ação.
-         * @param {number} color - A cor decimal do embed (usar logColors).
-         */
         async function enviarLogParaDiscord(title, description, color) {
-            if (!usuarioLogado) {
-                console.error("Tentativa de log sem usuário logado.");
-                return;
-            }
-
+            if (!usuarioLogado) { console.error("Tentativa de log sem usuário logado."); return; }
             const payload = {
                 username: "Logs do Sistema PMERJ",
-                avatar_url: "https://i.imgur.com/g4Fv6oM.png", // Um ícone genérico de "segurança"
+                avatar_url: "https://i.imgur.com/g4Fv6oM.png",
                 embeds: [{
                     title: title,
                     description: description,
                     color: color,
-                    fields: [
-                        { name: "Usuário da Ação", value: usuarioLogado.usuario, inline: true },
-                        { name: "Data e Hora", value: new Date().toLocaleString("pt-BR"), inline: true }
-                    ],
+                    fields: [{ name: "Usuário da Ação", value: usuarioLogado.usuario, inline: true }, { name: "Data e Hora", value: new Date().toLocaleString("pt-BR"), inline: true }],
                     footer: { text: `Sistema de Boletins - Categoria: ${usuarioLogado.categoria}` }
                 }]
             };
-
             try {
-                await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (error) {
-                console.error("Erro ao enviar log para o Discord:", error);
-            }
+                await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            } catch (error) { console.error("Erro ao enviar log para o Discord:", error); }
         }
 
+        /**
+         * Formata os dados de um boletim em uma string detalhada para logs.
+         * @param {object} boletim - O objeto do boletim a ser formatado.
+         * @returns {string} Uma string formatada com os detalhes do boletim.
+         */
+        function formatarDadosBoletimParaLog(boletim) {
+            const formatarPessoas = (pessoas) => {
+                if (!pessoas || pessoas.length === 0) return 'Nenhuma registrada.';
+                return pessoas.map(p => 
+                    `- Nome: ${p.nome || 'N/A'}\n` +
+                    `  - Nick: ${p.nick || 'N/A'}\n` +
+                    `  - Idade: ${p.idade || 'N/A'}\n` +
+                    `  - CPF/RG: ${p.cpf || 'N/A'}\n` +
+                    (p.contato ? `  - Contato: ${p.contato}\n` : '') +
+                    (p.estado ? `  - Estado Físico: ${p.estado}\n` : '') +
+                    (p.obs ? `  - Observação: ${p.obs}\n` : '')
+                ).join('\n');
+            };
+            let descricao = `**Oficial Responsável:** ${boletim.oficialResp || 'N/A'}\n`;
+            descricao += `**Pena + Multa Total:** ${boletim.penaMulta || 'N/A'}\n`;
+            descricao += `**Data do Fato:** ${boletim.localData ? new Date(boletim.localData).toLocaleString('pt-BR') : 'N/A'}\n\n`;
+            descricao += `**Oficiais Envolvidos:**\n\`\`\`\n${boletim.oficiais || 'Nenhum'}\n\`\`\`\n`;
+            descricao += `**Vítimas:**\n\`\`\`\n${formatarPessoas(boletim.vitimas)}\n\`\`\`\n`;
+            descricao += `**Autores:**\n\`\`\`\n${formatarPessoas(boletim.autores)}\n\`\`\`\n`;
+            descricao += `**Acusações:**\n\`\`\`\n${boletim.acusacoesSelecionadas && boletim.acusacoesSelecionadas.length > 0 ? boletim.acusacoesSelecionadas.join('\n') : 'Nenhuma'}\n\`\`\`\n`;
+            descricao += `**Local e Referência:**\n\`\`\`\nEndereço: ${boletim.localEndereco || 'N/A'}\nReferência: ${boletim.localReferencia || 'N/A'}\n\`\`\`\n`;
+            descricao += `**Relatório do Agente:**\n\`\`\`\n${boletim.relatoAgente || 'Nenhum relato.'}\n\`\`\``;
+            return descricao.length > 4000 ? descricao.substring(0, 4000) + "\n\n... (LOG TRUNCADO DEVIDO AO TAMANHO)" : descricao;
+        }
         // --- FIM DA SEÇÃO DE LOGS PARA O DISCORD ---
 
-
         // --- FUNÇÃO DE FEEDBACK VISUAL ---
-        function showFeedback(message, type = 'success') {
-            const container = document.getElementById('feedback-container');
-            container.textContent = message;
-            container.className = `show ${type === 'error' ? 'error' : ''}`;
-            setTimeout(() => container.classList.remove('show'), 3000);
-        }
+        function showFeedback(message, type = 'success') { const container = document.getElementById('feedback-container'); container.textContent = message; container.className = `show ${type === 'error' ? 'error' : ''}`; setTimeout(() => container.classList.remove('show'), 3000); }
 
         // --- CONTROLE DE TELAS E AUTENTICAÇÃO ---
-        function mostrarTela(screenId) {
-            mainScreens.forEach(id => document.getElementById(id).style.display = 'none');
-            document.getElementById(screenId).style.display = 'block';
-        }
-
+        function mostrarTela(screenId) { mainScreens.forEach(id => document.getElementById(id).style.display = 'none'); document.getElementById(screenId).style.display = 'block'; }
         function realizarLogin() {
             const usuarioInput = document.getElementById('usuario').value;
             const senhaInput = document.getElementById('senha').value;
             const erroMsg = document.getElementById('login-error');
             erroMsg.textContent = '';
-
             db.ref('usuarios').once('value', snapshot => {
                 const users = snapshot.val() || {};
-                
                 const ownerExists = Object.values(users).some(u => u.categoria === 'Owner');
-                if (!ownerExists) {
-                    const ownerUser = { usuario: 'Lipe', senha: '99881871', categoria: 'Owner' };
-                    db.ref('usuarios').push(ownerUser);
-                    users['temp_owner_key'] = ownerUser; 
-                }
-
-                let usuarioValido = null;
-                usuarioValido = Object.entries(users).find(([, user]) => user.usuario === usuarioInput && user.senha === senhaInput);
+                if (!ownerExists) { const ownerUser = { usuario: 'Lipe', senha: '99881871', categoria: 'Owner' }; db.ref('usuarios').push(ownerUser); users['temp_owner_key'] = ownerUser; }
+                let usuarioValido = Object.entries(users).find(([, user]) => user.usuario === usuarioInput && user.senha === senhaInput);
                 if (usuarioValido) usuarioValido = { id: usuarioValido[0], ...usuarioValido[1] };
-
                 if (usuarioValido) {
                     usuarioLogado = usuarioValido;
                     document.getElementById('login-screen').style.display = 'none';
@@ -384,39 +365,22 @@
                     abrirBoasVindas();
                     inicializarListenerBoletins();
                     filtrarAcusacoesDisponiveis();
-
-                    // LOG DE LOGIN
-                    enviarLogParaDiscord(
-                        'Login Realizado', 
-                        `O usuário **${usuarioLogado.usuario}** acessou o sistema.`,
-                        logColors.INFO
-                    );
-
-                } else {
-                    erroMsg.textContent = 'Usuário ou senha inválidos.';
-                }
-            }).catch(error => {
-                console.error("Erro no login:", error);
-                erroMsg.textContent = "Erro de conexão com o banco de dados.";
-            });
+                    enviarLogParaDiscord('Login Realizado', `O usuário **${usuarioLogado.usuario}** acessou o sistema.`, logColors.INFO);
+                } else { erroMsg.textContent = 'Usuário ou senha inválidos.'; }
+            }).catch(error => { console.error("Erro no login:", error); erroMsg.textContent = "Erro de conexão com o banco de dados."; });
         }
         
         // --- NAVEGAÇÃO PRINCIPAL ---
         const abrirBoasVindas = () => mostrarTela('tela-boas-vindas');
         const abrirLista = () => { mostrarTela('lista'); renderizarBoletins(); };
-        
         const abrirGerenciamento = () => {
             mostrarTela('tela-gerenciamento');
             const selectCategoria = document.getElementById('new-user-categoria');
             selectCategoria.innerHTML = '';
-            if (usuarioLogado.categoria === 'Owner') {
-                selectCategoria.innerHTML = `<option value="Policial">Policial</option><option value="Administrador">Administrador</option><option value="Owner">Owner</option>`;
-            } else if (usuarioLogado.categoria === 'Administrador') {
-                selectCategoria.innerHTML = `<option value="Policial">Policial</option>`;
-            }
+            if (usuarioLogado.categoria === 'Owner') { selectCategoria.innerHTML = `<option value="Policial">Policial</option><option value="Administrador">Administrador</option><option value="Owner">Owner</option>`; }
+            else if (usuarioLogado.categoria === 'Administrador') { selectCategoria.innerHTML = `<option value="Policial">Policial</option>`; }
             inicializarListenerUsuarios();
         };
-
         function abrirFormulario(limpar = false) {
             mostrarTela('formulario');
             if (limpar) {
@@ -431,39 +395,7 @@
         }
 
         // --- GERENCIAMENTO DE USUÁRIOS ---
-        function inicializarListenerUsuarios() {
-            db.ref('usuarios').on('value', snapshot => {
-                const container = document.getElementById('lista-usuarios');
-                container.innerHTML = '';
-                const users = snapshot.val();
-                if (users) {
-                    Object.entries(users).forEach(([id, user]) => {
-                        const userItem = document.createElement('div');
-                        userItem.className = 'user-item';
-                        const podeGerenciar = usuarioLogado.categoria === 'Owner' || (usuarioLogado.categoria === 'Administrador' && user.categoria !== 'Owner');
-                        let senhaHtml = '';
-                        if (user.categoria === 'Owner') {
-                            senhaHtml = `<div><strong>Senha:</strong> <span>••••••••</span></div>`;
-                        } else if (podeGerenciar) {
-                            senhaHtml = `<div class="password-field" onclick="togglePassword(this)"><strong>Senha:</strong> <span data-password="${user.senha}">••••••••</span></div>`;
-                        } else {
-                            senhaHtml = `<div><strong>Senha:</strong> <span>Acesso Restrito</span></div>`;
-                        }
-                        let acoesHtml = '';
-                        if (podeGerenciar && usuarioLogado.id !== id) {
-                            acoesHtml = `<div class="user-actions">
-                                            <button class="btn btn-secundario" onclick="prepararEdicaoUsuario('${id}', '${user.usuario}', '${user.senha}', '${user.categoria}')">Editar</button>
-                                            <button class="btn btn-perigo" onclick="excluirUsuario('${id}', '${user.usuario}', '${user.categoria}')">Excluir</button>
-                                         </div>`;
-                        }
-                        userItem.innerHTML = `<div class="user-info"><div><strong>Usuário:</strong> ${user.usuario}</div>${senhaHtml}<div><strong>Categoria:</strong> ${user.categoria}</div></div>${acoesHtml}`;
-                        container.appendChild(userItem);
-                    });
-                } else {
-                    container.innerHTML = '<p>Nenhum usuário cadastrado.</p>';
-                }
-            });
-        }
+        function inicializarListenerUsuarios() { db.ref('usuarios').on('value', snapshot => { const container = document.getElementById('lista-usuarios'); container.innerHTML = ''; const users = snapshot.val(); if (users) { Object.entries(users).forEach(([id, user]) => { const userItem = document.createElement('div'); userItem.className = 'user-item'; const podeGerenciar = usuarioLogado.categoria === 'Owner' || (usuarioLogado.categoria === 'Administrador' && user.categoria !== 'Owner'); let senhaHtml = ''; if (user.categoria === 'Owner') { senhaHtml = `<div><strong>Senha:</strong> <span>••••••••</span></div>`; } else if (podeGerenciar) { senhaHtml = `<div class="password-field" onclick="togglePassword(this)"><strong>Senha:</strong> <span data-password="${user.senha}">••••••••</span></div>`; } else { senhaHtml = `<div><strong>Senha:</strong> <span>Acesso Restrito</span></div>`; } let acoesHtml = ''; if (podeGerenciar && usuarioLogado.id !== id) { acoesHtml = `<div class="user-actions"><button class="btn btn-secundario" onclick="prepararEdicaoUsuario('${id}', '${user.usuario}', '${user.senha}', '${user.categoria}')">Editar</button><button class="btn btn-perigo" onclick="excluirUsuario('${id}', '${user.usuario}', '${user.categoria}')">Excluir</button></div>`; } userItem.innerHTML = `<div class="user-info"><div><strong>Usuário:</strong> ${user.usuario}</div>${senhaHtml}<div><strong>Categoria:</strong> ${user.categoria}</div></div>${acoesHtml}`; container.appendChild(userItem); }); } else { container.innerHTML = '<p>Nenhum usuário cadastrado.</p>'; } }); }
         function togglePassword(element) { const span = element.querySelector('span'); span.textContent = span.textContent.includes('•') ? span.dataset.password : '••••••••'; }
         const handleUserFormSubmit = () => usuarioEmEdicaoId ? atualizarUsuario() : adicionarUsuario();
         function adicionarUsuario() { const newUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!newUser.usuario || !newUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios').push(newUser).then(() => { showFeedback("Usuário adicionado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Criado', `Criou o usuário **${newUser.usuario}** (Categoria: ${newUser.categoria}).`, logColors.SUCCESS); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
@@ -475,7 +407,7 @@
         // --- BOLETINS ---
         function addVitima(v = {}) { document.getElementById('vitimas').insertAdjacentHTML('beforeend', `<div><button class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button><input placeholder="Nome" value="${v.nome||''}"><input placeholder="Nick" value="${v.nick||''}"><input type="number" placeholder="Idade" value="${v.idade||''}"><input placeholder="CPF/RG" value="${v.cpf||''}"><input placeholder="Observação" value="${v.obs||''}"></div>`); }
         function addAutor(a = {}) { document.getElementById('autores').insertAdjacentHTML('beforeend', `<div><button class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button><input placeholder="Nome" value="${a.nome||''}"><input placeholder="Nick" value="${a.nick||''}"><input type="number" placeholder="Idade" value="${a.idade||''}"><input placeholder="Contato" value="${a.contato||''}"><input placeholder="Estado Físico" value="${a.estado||''}"><input placeholder="CPF/RG" value="${a.cpf||''}"></div>`); }
-        document.getElementById('toggleAcusaBtn').addEventListener('click', function() { const container = document.getElementById('acusaContainer'); const isExpanded = container.style.display === 'block'; container.style.display = isExpanded ? 'none' : 'block'; this.innerHTML = isExpanded ? '➕ Adicionar/Ver Acusações' : '➖ Fechar Acusações'; });
+        document.getElementById('toggleAcusaBtn').addEventListener('click', function() { const container = document.getElementById('acusaContainer'); const isExpanded = container.style.display === 'block'; container.style.display = isExpanded ? 'none' : 'block'; this.innerHTML = isExpanded ? '➖ Fechar Acusações' : '➕ Adicionar/Ver Acusações'; });
         filtrarAcusacoesDisponiveis = function() { const filtro = document.getElementById('buscaAcusacao').value.toLowerCase(); const lista = document.getElementById('acusaLista'); lista.innerHTML = ''; acusacoesDisponiveis.forEach(a => { if (a.nome.toLowerCase().includes(filtro) && !acusacoesSelecionadas.some(sa => sa.nome === a.nome)) { const el = document.createElement('div'); el.innerHTML = `<strong>${a.nome}</strong><button class="btn btn-sucesso" onclick="toggleAcusacao('${a.nome}')">+</button>`; lista.appendChild(el); } }); };
         toggleAcusacao = function(nome) { const index = acusacoesSelecionadas.findIndex(a => a.nome === nome); if (index === -1) { const acus = acusacoesDisponiveis.find(a => a.nome === nome); if (acus) acusacoesSelecionadas.push(acus); } else { acusacoesSelecionadas.splice(index, 1); } atualizarAcusaSelecionadas(); filtrarAcusacoesDisponiveis(); };
         atualizarAcusaSelecionadas = function() { const container = document.getElementById('acusaSelecionadas'); container.innerHTML = ''; let penaTotal = 0, multaTotal = 0; acusacoesSelecionadas.forEach(a => { penaTotal += a.pena; multaTotal += a.multa; const div = document.createElement('div'); div.innerHTML = `${a.nome} <button class="btn btn-perigo" onclick="toggleAcusacao('${a.nome}')">X</button>`; container.appendChild(div); }); document.getElementById('penaTotal').value = `${penaTotal} anos + R$${multaTotal.toLocaleString('pt-BR')}`; };
@@ -484,15 +416,11 @@
         const handleFormSubmit = () => boletimEmEdicaoId ? atualizarBoletim() : enviarBoletim();
 
         function enviarBoletim() {
-            if (!document.getElementById('oficialResp').value.trim()) {
-                showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return;
-            }
+            if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; }
             const counterRef = db.ref('metadata/boletimCounter');
             counterRef.transaction(currentCount => (currentCount || 0) + 1)
             .then(result => {
-                if (!result.committed) {
-                    showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error'); return;
-                }
+                if (!result.committed) { showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error'); return; }
                 const novoNumeroBOPM = result.snapshot.val();
                 const boletim = coletarDadosDoFormulario();
                 boletim.criadoEm = new Date().toISOString();
@@ -500,13 +428,11 @@
                 return db.ref('boletins').push(boletim).then(() => {
                     const numeroFormatado = String(novoNumeroBOPM).padStart(3, '0');
                     showFeedback(`Boletim BOPM Nº ${numeroFormatado} criado com sucesso!`);
-                    enviarLogParaDiscord('Novo Boletim Criado', `Criou o **BOPM Nº ${numeroFormatado}**.\nOficial Responsável: **${boletim.oficialResp}**`, logColors.SUCCESS);
+                    const logDescription = formatarDadosBoletimParaLog(boletim);
+                    enviarLogParaDiscord(`✅ Novo Boletim Criado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.SUCCESS);
                     abrirLista();
                 });
-            }).catch(e => {
-                console.error("Erro na transação do contador:", e);
-                showFeedback('Erro crítico ao gerar número do boletim: ' + e.message, 'error');
-            });
+            }).catch(e => { console.error("Erro na transação do contador:", e); showFeedback('Erro crítico ao gerar número do boletim: ' + e.message, 'error'); });
         }
 
         function atualizarBoletim() { 
@@ -517,32 +443,26 @@
                 const boletimEditado = boletinsCache.find(b => b.id === boletimEmEdicaoId);
                 const numeroFormatado = boletimEditado ? String(boletimEditado.numeroBOPM).padStart(3, '0') : `ID ${boletimEmEdicaoId}`;
                 showFeedback('Boletim atualizado com sucesso!'); 
-                enviarLogParaDiscord('Boletim Editado', `Editou o **BOPM Nº ${numeroFormatado}**.`, logColors.WARNING);
+                const logDescription = formatarDadosBoletimParaLog(boletim);
+                enviarLogParaDiscord(`✏️ Boletim Editado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.WARNING);
                 abrirLista(); 
             }).catch(e => showFeedback('Erro: ' + e.message, 'error')); 
         }
         
         editarBoletim = function(id) { 
-            const b = boletinsCache.find(bo => bo.id === id); 
-            if (!b) return; 
-            abrirFormulario(false); 
-            boletimEmEdicaoId = id; 
+            const b = boletinsCache.find(bo => bo.id === id); if (!b) return; 
+            abrirFormulario(false); boletimEmEdicaoId = id; 
             document.getElementById('oficialResp').value = b.oficialResp || ''; 
             document.getElementById('oficiais').value = b.oficiais || ''; 
             document.getElementById('localEndereco').value = b.localEndereco || ''; 
             document.getElementById('localReferencia').value = b.localReferencia || ''; 
             document.getElementById('localData').value = b.localData || ''; 
             document.getElementById('relatoAgente').value = b.relatoAgente || ''; 
-            document.getElementById('vitimas').innerHTML = ''; 
-            if (b.vitimas) b.vitimas.forEach(v => addVitima(v)); 
-            document.getElementById('autores').innerHTML = ''; 
-            if (b.autores) b.autores.forEach(a => addAutor(a)); 
-            acusacoesSelecionadas = []; 
-            if (b.acusacoesSelecionadas) b.acusacoesSelecionadas.forEach(nome => { const ac = acusacoesDisponiveis.find(a => a.nome === nome); if (ac) acusacoesSelecionadas.push(ac); }); 
-            atualizarAcusaSelecionadas(); 
-            filtrarAcusacoesDisponiveis(); 
+            document.getElementById('vitimas').innerHTML = ''; if (b.vitimas) b.vitimas.forEach(v => addVitima(v)); 
+            document.getElementById('autores').innerHTML = ''; if (b.autores) b.autores.forEach(a => addAutor(a)); 
+            acusacoesSelecionadas = []; if (b.acusacoesSelecionadas) b.acusacoesSelecionadas.forEach(nome => { const ac = acusacoesDisponiveis.find(a => a.nome === nome); if (ac) acusacoesSelecionadas.push(ac); }); 
+            atualizarAcusaSelecionadas(); filtrarAcusacoesDisponiveis(); 
             document.getElementById('formSubmitButton').textContent = 'Atualizar Boletim'; 
-
             const numeroFormatado = String(b.numeroBOPM).padStart(3, '0');
             const titulo = b.numeroBOPM ? `Editando BOPM Nº ${numeroFormatado}` : `Editando Boletim ID: ${id}`;
             document.getElementById('form-title').textContent = titulo;
@@ -550,36 +470,29 @@
 
         function excluirBoletim(id) {
             if (confirm('Tem certeza que deseja excluir este boletim? Esta ação não pode ser desfeita.')) {
-                const boletimExcluido = boletinsCache.find(b => b.id === id); // Pega os dados antes de excluir
+                const boletimExcluido = boletinsCache.find(b => b.id === id);
                 db.ref('boletins/' + id).remove()
                     .then(() => {
-                        const numeroFormatado = boletimExcluido ? String(boletimExcluido.numeroBOPM).padStart(3, '0') : `ID ${id}`;
-                        const oficialResp = boletimExcluido ? boletimExcluido.oficialResp : 'N/A';
                         showFeedback('Boletim excluído com sucesso!');
-                        enviarLogParaDiscord('Boletim Excluído', `Excluiu o **BOPM Nº ${numeroFormatado}** (Oficial Resp.: ${oficialResp}).`, logColors.DANGER);
+                        if (boletimExcluido) {
+                            const numeroFormatado = String(boletimExcluido.numeroBOPM).padStart(3, '0');
+                            const logDescription = formatarDadosBoletimParaLog(boletimExcluido);
+                            enviarLogParaDiscord(`❌ Boletim Excluído - BOPM Nº ${numeroFormatado}`, logDescription, logColors.DANGER);
+                        } else {
+                            enviarLogParaDiscord(`❌ Boletim Excluído - ID ${id}`, "Não foi possível recuperar os dados completos do boletim para o log.", logColors.DANGER);
+                        }
                     })
                     .catch(error => showFeedback('Erro ao excluir o boletim: ' + error.message, 'error'));
             }
         }
 
-        function inicializarListenerBoletins() {
-            db.ref('boletins').on('value', snapshot => {
-                const data = snapshot.val() || {};
-                boletinsCache = Object.entries(data).map(([id, values]) => ({ id, ...values }));
-                boletinsCache.sort((a, b) => (b.numeroBOPM || 0) - (a.numeroBOPM || 0));
-                if (document.getElementById('lista').style.display === 'block') renderizarBoletins();
-            });
-        }
-
+        function inicializarListenerBoletins() { db.ref('boletins').on('value', snapshot => { const data = snapshot.val() || {}; boletinsCache = Object.entries(data).map(([id, values]) => ({ id, ...values })); boletinsCache.sort((a, b) => (b.numeroBOPM || 0) - (a.numeroBOPM || 0)); if (document.getElementById('lista').style.display === 'block') renderizarBoletins(); }); }
+        
         function renderizarBoletins() {
             const pesquisa = document.getElementById('pesquisa').value.toLowerCase();
             const lista = document.getElementById('boletins'); lista.innerHTML = '';
             const boletinsFiltrados = boletinsCache.filter(b => JSON.stringify(b).toLowerCase().includes(pesquisa));
-            
-            if (boletinsFiltrados.length === 0) {
-                lista.innerHTML = '<p style="text-align:center; padding: 20px;">Nenhum boletim encontrado.</p>'; return;
-            }
-
+            if (boletinsFiltrados.length === 0) { lista.innerHTML = '<p style="text-align:center; padding: 20px;">Nenhum boletim encontrado.</p>'; return; }
             boletinsFiltrados.forEach(b => {
                 const item = document.createElement('div');
                 item.className = 'boletim';
@@ -587,13 +500,9 @@
                 const vitimasStr = formatList(b.vitimas, ['nome', 'idade', 'cpf']);
                 const autoresStr = formatList(b.autores, ['nome', 'idade', 'cpf']);
                 let deleteBtnHtml = '';
-                if (usuarioLogado && (usuarioLogado.categoria === 'Administrador' || usuarioLogado.categoria === 'Owner')) {
-                    deleteBtnHtml = `<button class="btn btn-perigo" onclick="excluirBoletim('${b.id}')">Excluir</button>`;
-                }
-
+                if (usuarioLogado && (usuarioLogado.categoria === 'Administrador' || usuarioLogado.categoria === 'Owner')) { deleteBtnHtml = `<button class="btn btn-perigo" onclick="excluirBoletim('${b.id}')">Excluir</button>`; }
                 const numeroFormatado = b.numeroBOPM ? String(b.numeroBOPM).padStart(3, '0') : 'S/N';
                 const tituloBoletim = `BOPM Nº ${numeroFormatado}`;
-
                 item.innerHTML = `
                     <div class="boletim-summary" onclick="toggleDetalhesBoletim(this.parentElement.querySelector('.boletim-botoes button'))">
                         <p><strong>Boletim:</strong> ${tituloBoletim}</p>
@@ -620,12 +529,7 @@
             });
         }
         
-        function toggleDetalhesBoletim(button) {
-            const boletimDiv = button.closest('.boletim');
-            const detailsDiv = boletimDiv.querySelector('.boletim-details');
-            const isHidden = detailsDiv.style.display === 'none';
-            detailsDiv.style.display = isHidden ? 'block' : 'none';
-        }
+        function toggleDetalhesBoletim(button) { const boletimDiv = button.closest('.boletim'); const detailsDiv = boletimDiv.querySelector('.boletim-details'); const isHidden = detailsDiv.style.display === 'none'; detailsDiv.style.display = isHidden ? 'block' : 'none'; }
 
     </script>
 </body>
