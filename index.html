@@ -157,7 +157,7 @@
     </style>
 </head>
 <body>
-
+    <!-- O HTML do body continua o mesmo -->
     <div id="login-screen">
         <h1>Acesso ao Sistema de Boletins</h1>
         <label for="usuario">Usuário:</label>
@@ -289,6 +289,58 @@
         let boletinsCache = [], acusacoesSelecionadas = [], usuarioLogado = null, boletimEmEdicaoId = null, usuarioEmEdicaoId = null;
         const mainScreens = ['tela-boas-vindas', 'formulario', 'lista', 'tela-gerenciamento'];
         
+        // --- INÍCIO DA SEÇÃO DE LOGS PARA O DISCORD ---
+
+        const webhookUrl = "https://discord.com/api/webhooks/1387910467388969061/C-OfGNaaN37BGdu8MP1TxTXbKLoOtn3B3BoZ7lDMNJEP-E_kh0tn5yi-FFXNCQy5xYUm";
+
+        const logColors = {
+            SUCCESS: 3066993,  // Verde
+            DANGER: 15158332,  // Vermelho
+            WARNING: 16776960, // Amarelo
+            INFO: 3447003,     // Azul
+        };
+
+        /**
+         * Envia um log formatado para um webhook do Discord.
+         * @param {string} title - O título da ação (ex: "Novo Boletim Criado").
+         * @param {string} description - A descrição detalhada da ação.
+         * @param {number} color - A cor decimal do embed (usar logColors).
+         */
+        async function enviarLogParaDiscord(title, description, color) {
+            if (!usuarioLogado) {
+                console.error("Tentativa de log sem usuário logado.");
+                return;
+            }
+
+            const payload = {
+                username: "Logs do Sistema PMERJ",
+                avatar_url: "https://i.imgur.com/g4Fv6oM.png", // Um ícone genérico de "segurança"
+                embeds: [{
+                    title: title,
+                    description: description,
+                    color: color,
+                    fields: [
+                        { name: "Usuário da Ação", value: usuarioLogado.usuario, inline: true },
+                        { name: "Data e Hora", value: new Date().toLocaleString("pt-BR"), inline: true }
+                    ],
+                    footer: { text: `Sistema de Boletins - Categoria: ${usuarioLogado.categoria}` }
+                }]
+            };
+
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (error) {
+                console.error("Erro ao enviar log para o Discord:", error);
+            }
+        }
+
+        // --- FIM DA SEÇÃO DE LOGS PARA O DISCORD ---
+
+
         // --- FUNÇÃO DE FEEDBACK VISUAL ---
         function showFeedback(message, type = 'success') {
             const container = document.getElementById('feedback-container');
@@ -332,6 +384,14 @@
                     abrirBoasVindas();
                     inicializarListenerBoletins();
                     filtrarAcusacoesDisponiveis();
+
+                    // LOG DE LOGIN
+                    enviarLogParaDiscord(
+                        'Login Realizado', 
+                        `O usuário **${usuarioLogado.usuario}** acessou o sistema.`,
+                        logColors.INFO
+                    );
+
                 } else {
                     erroMsg.textContent = 'Usuário ou senha inválidos.';
                 }
@@ -366,7 +426,7 @@
                 acusacoesSelecionadas = [];
                 atualizarAcusaSelecionadas();
                 document.getElementById('formSubmitButton').textContent = 'Enviar Boletim';
-                document.getElementById('form-title').textContent = 'Preencher Novo Boletim'; // <-- MODIFICAÇÃO BOPM Nº
+                document.getElementById('form-title').textContent = 'Preencher Novo Boletim';
             }
         }
 
@@ -406,10 +466,10 @@
         }
         function togglePassword(element) { const span = element.querySelector('span'); span.textContent = span.textContent.includes('•') ? span.dataset.password : '••••••••'; }
         const handleUserFormSubmit = () => usuarioEmEdicaoId ? atualizarUsuario() : adicionarUsuario();
-        function adicionarUsuario() { const newUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!newUser.usuario || !newUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios').push(newUser).then(() => { showFeedback("Usuário adicionado com sucesso!"); resetUserForm(); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
+        function adicionarUsuario() { const newUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!newUser.usuario || !newUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios').push(newUser).then(() => { showFeedback("Usuário adicionado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Criado', `Criou o usuário **${newUser.usuario}** (Categoria: ${newUser.categoria}).`, logColors.SUCCESS); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
         function prepararEdicaoUsuario(id, usuario, senha, categoriaAlvo) { if (usuarioLogado.categoria === 'Administrador' && categoriaAlvo === 'Owner') { showFeedback("Administradores não podem editar usuários da categoria Owner.", 'error'); return; } usuarioEmEdicaoId = id; document.getElementById('new-user-usuario').value = usuario; document.getElementById('new-user-senha').value = senha; document.getElementById('new-user-senha').type = 'text'; document.getElementById('new-user-categoria').value = categoriaAlvo; document.getElementById('form-user-title').textContent = "Editando Usuário"; document.getElementById('form-add-user-btn').textContent = "Atualizar"; document.getElementById('cancel-edit-user-btn').style.display = 'inline-block'; document.getElementById('form-add-user').scrollIntoView({ behavior: 'smooth' }); }
-        function atualizarUsuario() { const updatedUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!updatedUser.usuario || !updatedUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios/' + usuarioEmEdicaoId).update(updatedUser).then(() => { showFeedback("Usuário atualizado com sucesso!"); resetUserForm(); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
-        function excluirUsuario(id, nomeUsuario, categoriaAlvo) { if (usuarioLogado.id === id) { showFeedback("Você não pode excluir seu próprio usuário.", 'error'); return; } if (usuarioLogado.categoria === 'Administrador' && categoriaAlvo === 'Owner') { showFeedback("Administradores não podem excluir usuários da categoria Owner.", 'error'); return; } if (confirm(`Tem certeza que deseja excluir o usuário "${nomeUsuario}"?`)) { db.ref('usuarios/' + id).remove().then(() => showFeedback("Usuário excluído com sucesso.")).catch(err => showFeedback("Erro: " + err.message, 'error')); } }
+        function atualizarUsuario() { const updatedUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!updatedUser.usuario || !updatedUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios/' + usuarioEmEdicaoId).update(updatedUser).then(() => { showFeedback("Usuário atualizado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Editado', `Editou os dados do usuário **${updatedUser.usuario}**.`, logColors.WARNING); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
+        function excluirUsuario(id, nomeUsuario, categoriaAlvo) { if (usuarioLogado.id === id) { showFeedback("Você não pode excluir seu próprio usuário.", 'error'); return; } if (usuarioLogado.categoria === 'Administrador' && categoriaAlvo === 'Owner') { showFeedback("Administradores não podem excluir usuários da categoria Owner.", 'error'); return; } if (confirm(`Tem certeza que deseja excluir o usuário "${nomeUsuario}"?`)) { db.ref('usuarios/' + id).remove().then(() => { showFeedback("Usuário excluído com sucesso."); enviarLogParaDiscord('Usuário Excluído', `Excluiu o usuário **${nomeUsuario}**.`, logColors.DANGER); }).catch(err => showFeedback("Erro: " + err.message, 'error')); } }
         function resetUserForm() { usuarioEmEdicaoId = null; document.querySelector('#form-add-user form').reset(); document.getElementById('new-user-senha').type = 'password'; document.getElementById('form-user-title').textContent = "Adicionar Novo Usuário"; document.getElementById('form-add-user-btn').textContent = "Inserir"; document.getElementById('cancel-edit-user-btn').style.display = 'none'; }
 
         // --- BOLETINS ---
@@ -423,50 +483,45 @@
         
         const handleFormSubmit = () => boletimEmEdicaoId ? atualizarBoletim() : enviarBoletim();
 
-        // <-- MODIFICAÇÃO BOPM Nº: Função de envio totalmente refeita para usar o contador
         function enviarBoletim() {
             if (!document.getElementById('oficialResp').value.trim()) {
-                showFeedback('O campo "Oficial responsável" é obrigatório.', 'error');
-                return;
+                showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return;
             }
-
-            // Referência ao nosso contador de boletins no Firebase
             const counterRef = db.ref('metadata/boletimCounter');
-
-            // Usa uma transação para garantir que o número seja único
-            counterRef.transaction(currentCount => {
-                // Se o contador não existir, ele será null. Começamos do 1.
-                // Caso contrário, incrementamos o valor atual.
-                return (currentCount || 0) + 1;
-            }).then(result => {
+            counterRef.transaction(currentCount => (currentCount || 0) + 1)
+            .then(result => {
                 if (!result.committed) {
-                    showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error');
-                    return;
+                    showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error'); return;
                 }
-                
-                // O novo número sequencial do boletim
                 const novoNumeroBOPM = result.snapshot.val();
-
                 const boletim = coletarDadosDoFormulario();
                 boletim.criadoEm = new Date().toISOString();
-                boletim.numeroBOPM = novoNumeroBOPM; // Adiciona o novo número ao objeto do boletim
-
-                // Salva o boletim completo no banco de dados
+                boletim.numeroBOPM = novoNumeroBOPM; 
                 return db.ref('boletins').push(boletim).then(() => {
                     const numeroFormatado = String(novoNumeroBOPM).padStart(3, '0');
                     showFeedback(`Boletim BOPM Nº ${numeroFormatado} criado com sucesso!`);
+                    enviarLogParaDiscord('Novo Boletim Criado', `Criou o **BOPM Nº ${numeroFormatado}**.\nOficial Responsável: **${boletim.oficialResp}**`, logColors.SUCCESS);
                     abrirLista();
                 });
-
             }).catch(e => {
                 console.error("Erro na transação do contador:", e);
                 showFeedback('Erro crítico ao gerar número do boletim: ' + e.message, 'error');
             });
         }
 
-        function atualizarBoletim() { if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; } const boletim = coletarDadosDoFormulario(); boletim.atualizadoEm = new Date().toISOString(); db.ref('boletins/' + boletimEmEdicaoId).update(boletim).then(() => { showFeedback('Boletim atualizado com sucesso!'); abrirLista(); }).catch(e => showFeedback('Erro: ' + e.message, 'error')); }
+        function atualizarBoletim() { 
+            if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; } 
+            const boletim = coletarDadosDoFormulario(); 
+            boletim.atualizadoEm = new Date().toISOString(); 
+            db.ref('boletins/' + boletimEmEdicaoId).update(boletim).then(() => { 
+                const boletimEditado = boletinsCache.find(b => b.id === boletimEmEdicaoId);
+                const numeroFormatado = boletimEditado ? String(boletimEditado.numeroBOPM).padStart(3, '0') : `ID ${boletimEmEdicaoId}`;
+                showFeedback('Boletim atualizado com sucesso!'); 
+                enviarLogParaDiscord('Boletim Editado', `Editou o **BOPM Nº ${numeroFormatado}**.`, logColors.WARNING);
+                abrirLista(); 
+            }).catch(e => showFeedback('Erro: ' + e.message, 'error')); 
+        }
         
-        // <-- MODIFICAÇÃO BOPM Nº: Título da edição atualizado
         editarBoletim = function(id) { 
             const b = boletinsCache.find(bo => bo.id === id); 
             if (!b) return; 
@@ -488,7 +543,6 @@
             filtrarAcusacoesDisponiveis(); 
             document.getElementById('formSubmitButton').textContent = 'Atualizar Boletim'; 
 
-            // Define o título do formulário com o número do BOPM
             const numeroFormatado = String(b.numeroBOPM).padStart(3, '0');
             const titulo = b.numeroBOPM ? `Editando BOPM Nº ${numeroFormatado}` : `Editando Boletim ID: ${id}`;
             document.getElementById('form-title').textContent = titulo;
@@ -496,8 +550,14 @@
 
         function excluirBoletim(id) {
             if (confirm('Tem certeza que deseja excluir este boletim? Esta ação não pode ser desfeita.')) {
+                const boletimExcluido = boletinsCache.find(b => b.id === id); // Pega os dados antes de excluir
                 db.ref('boletins/' + id).remove()
-                    .then(() => showFeedback('Boletim excluído com sucesso!'))
+                    .then(() => {
+                        const numeroFormatado = boletimExcluido ? String(boletimExcluido.numeroBOPM).padStart(3, '0') : `ID ${id}`;
+                        const oficialResp = boletimExcluido ? boletimExcluido.oficialResp : 'N/A';
+                        showFeedback('Boletim excluído com sucesso!');
+                        enviarLogParaDiscord('Boletim Excluído', `Excluiu o **BOPM Nº ${numeroFormatado}** (Oficial Resp.: ${oficialResp}).`, logColors.DANGER);
+                    })
                     .catch(error => showFeedback('Erro ao excluir o boletim: ' + error.message, 'error'));
             }
         }
@@ -506,13 +566,11 @@
             db.ref('boletins').on('value', snapshot => {
                 const data = snapshot.val() || {};
                 boletinsCache = Object.entries(data).map(([id, values]) => ({ id, ...values }));
-                // <-- MODIFICAÇÃO BOPM Nº: Ordena pelo número do BOPM em ordem decrescente
                 boletinsCache.sort((a, b) => (b.numeroBOPM || 0) - (a.numeroBOPM || 0));
                 if (document.getElementById('lista').style.display === 'block') renderizarBoletins();
             });
         }
 
-        // <-- MODIFICAÇÃO BOPM Nº: Exibição na lista atualizada
         function renderizarBoletins() {
             const pesquisa = document.getElementById('pesquisa').value.toLowerCase();
             const lista = document.getElementById('boletins'); lista.innerHTML = '';
@@ -533,7 +591,6 @@
                     deleteBtnHtml = `<button class="btn btn-perigo" onclick="excluirBoletim('${b.id}')">Excluir</button>`;
                 }
 
-                // Cria o título do boletim com fallback para o ID antigo, se necessário
                 const numeroFormatado = b.numeroBOPM ? String(b.numeroBOPM).padStart(3, '0') : 'S/N';
                 const tituloBoletim = `BOPM Nº ${numeroFormatado}`;
 
