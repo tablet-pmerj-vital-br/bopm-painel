@@ -63,7 +63,7 @@
         .header .sub-info { font-size: 0.9rem; color: var(--cor-texto-suave); font-weight: 500; letter-spacing: 0.04em; text-shadow: 1px 1px 3px #001933; }
         .content { display: flex; flex-grow: 1; padding: 20px 30px; gap: 30px; background-color: #001a33; }
         .nav { flex-shrink: 0; width: 200px; display: flex; flex-direction: column; gap: 15px; }
-        .nav button { background-color: var(--cor-destaque); border: none; border-radius: 10px; color: white; font-weight: 600; padding: 15px 10px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); text-align: left; padding-left: 20px; font-size: 1.05em; }
+        .nav button { background-color: var(--cor-destaque); border: none; border-radius: 10px; color: white; font-weight: 600; padding: 15px 10px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); text-align: left; padding-left: 20px; font-size: 1.05em; display: flex; align-items: center; gap: 10px; }
         #gerenciamento-btn { background-color: var(--cor-aviso); }
         .nav button:hover { background-color: #0066cc; box-shadow: 0 3px 10px rgba(0, 102, 204, 0.8); transform: translateY(-2px); }
         #gerenciamento-btn:hover { background-color: #ffcc00; box-shadow: 0 3px 10px rgba(255, 204, 0, 0.8); }
@@ -73,10 +73,45 @@
         #tela-boas-vindas { text-align: center; padding: 40px 20px; }
         #tela-boas-vindas h2 { font-size: 2.5rem; color: #aad4ff; margin-bottom: 15px; text-shadow: 1px 1px 8px #0055aa; }
         #tela-boas-vindas p { font-size: 1.2rem; color: #cce6ff; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        
+        /* --- ESTILOS DA TELA INÍCIO E PROCURADOS (NOVO) --- */
+        #tela-inicio { display: flex; gap: 30px; }
+        .perfil-agente, .lista-procurados { flex: 1; background-color: rgba(0, 51, 102, 0.5); padding: 20px; border-radius: 12px; box-shadow: inset 0 0 10px #001a33; }
+        .perfil-agente p { font-size: 1.1rem; color: var(--cor-texto-suave); margin: 12px 0; }
+        .perfil-agente strong { color: var(--cor-texto); display: inline-block; min-width: 120px; }
+        .procurado-item { background-color: var(--cor-principal); padding: 15px; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .procurado-item-nome { font-weight: 700; font-size: 1.2rem; color: #ffdddd; text-shadow: 1px 1px 3px var(--cor-erro); }
+        
+        /* --- [NOVO] ESTILOS DA IMAGEM DE PERFIL --- */
+        .perfil-imagem-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        #perfil-imagem {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cor-destaque);
+            margin-bottom: 15px;
+            cursor: pointer;
+            background-color: var(--cor-secundaria);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #perfil-imagem:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--cor-destaque);
+        }
+        .perfil-imagem-acoes {
+            display: flex;
+            gap: 10px;
+        }
 
         /* --- ESTILOS DE FORMULÁRIOS --- */
         .form-section { background-color: rgba(0, 51, 102, 0.5); padding: 15px 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: inset 0 0 10px #001a33; }
-        .formulario h2, #tela-gerenciamento h2 { margin-top: 0; font-weight: 700; font-size: 1.6rem; color: #aad4ff; text-shadow: 1px 1px 3px #001933; border-bottom: 2px solid var(--cor-destaque); padding-bottom: 10px; margin-bottom: 20px; }
+        .formulario h2, #tela-gerenciamento h2, #tela-inicio h2 { margin-top: 0; font-weight: 700; font-size: 1.6rem; color: #aad4ff; text-shadow: 1px 1px 3px #001933; border-bottom: 2px solid var(--cor-destaque); padding-bottom: 10px; margin-bottom: 20px; }
         .formulario label, #tela-gerenciamento label { display: block; margin-top: 10px; margin-bottom: 5px; font-weight: 600; color: var(--cor-texto-suave); }
         input, textarea, select { width: 100%; padding: 10px 12px; margin-bottom: 16px; border-radius: 8px; border: 2px solid transparent; font-size: 1rem; font-weight: 500; transition: all 0.3s ease; color: var(--cor-secundaria); background-color: #e0f0ff; }
         input:focus, textarea:focus, select:focus { outline: none; border-color: #0074d9; background-color: #fff; box-shadow: 0 0 10px #0074d9aa; }
@@ -96,18 +131,27 @@
         .btn-neutro:hover { background-color: #0066cc; }
 
         /* --- ESTILOS DO FORMULÁRIO DE BOLETIM --- */
-        #vitimas > div, #autores > div { margin-bottom: 15px; position: relative; padding: 15px; background-color: rgba(0,0,0,0.15); border-radius: 8px; }
+        #vitimas > div { margin-bottom: 15px; position: relative; padding: 15px; background-color: rgba(0,0,0,0.15); border-radius: 8px; }
+        #autores > .autor-container { 
+            margin-bottom: 20px; 
+            position: relative; 
+            padding: 20px; 
+            background-color: rgba(0,0,0,0.25); 
+            border: 1px solid var(--cor-destaque);
+            border-radius: 12px; 
+        }
         .remove-item-btn { position: absolute; top: 10px; right: 10px; }
-        #toggleAcusaBtn { font-size: 0.9em; padding: 8px 12px; }
-        #acusaLista > div, #acusaSelecionadas > div { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; margin-bottom: 8px; border-radius: 8px; font-weight: 600; }
-        #acusaLista > div { background: var(--cor-destaque); }
-        #acusaSelecionadas > div { background-color: #006622; color: white; }
+        
+        .autor-container .toggle-acusa-btn { font-size: 0.9em; padding: 8px 12px; }
+        .autor-container .acusa-lista-disponivel > div { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; background: var(--cor-destaque); }
+        .autor-container .acusa-lista-selecionada > div { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; font-weight: 600; background-color: #006622; color: white;}
+        .acusa-sub-section { background-color: rgba(0, 51, 102, 0.4); padding: 15px; border-radius: 8px; margin-top: 15px; }
 
         /* --- ESTILOS DA LISTA DE BOLETINS --- */
         .search-bar { margin-bottom: 20px; }
         .boletim { background-color: var(--cor-principal); border-radius: 15px; padding: 20px; margin-bottom: 18px; box-shadow: 0 3px 10px rgba(0,0,0,0.3); transition: all 0.3s ease; }
         .boletim:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4); }
-        .boletim-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 1em; user-select: none; color: #cce6ff; }
+        .boletim-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 1em; user-select: none; color: #cce6ff; cursor: pointer; }
         .boletim-summary p { margin: 0; }
         .boletim-summary strong { color: #aaddff; }
         .boletim-details { margin-top: 20px; border-top: 1px solid var(--cor-destaque); padding-top: 15px; }
@@ -115,6 +159,7 @@
         .boletim-details p { margin: 5px 0 15px 0; }
         .boletim-details pre { white-space: pre-wrap; font-family: inherit; background-color: #002244; padding: 10px; border-radius: 8px; color: #a8c8ff; }
         .boletim-botoes { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; } 
+        .autor-item-line { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
 
         /* --- ESTILOS DE GERENCIAMENTO DE USUÁRIOS --- */
         #form-add-user { margin-bottom: 30px; }
@@ -153,6 +198,7 @@
             .nav { width: 100%; flex-direction: row; justify-content: space-around; gap: 10px; margin-bottom: 15px; }
             .nav button { flex-grow: 1; text-align: center; padding: 12px 8px; }
             .main-area { max-height: 65vh; padding: 20px; }
+            #tela-inicio { flex-direction: column; }
         }
     </style>
 </head>
@@ -173,7 +219,6 @@
             <div class="header-text">
                 <h1>Polícia Militar do Estado do Rio de Janeiro</h1>
                 <div class="sub-info">Sistema Integrado de Boletins de Ocorrência<br>
-                
                 Desenvolvido por LipeDEV (Noah VeraCruz)</div>
             </div>
             <img src="pmerje.png" />
@@ -181,6 +226,7 @@
 
         <section class="content">
             <nav class="nav" aria-label="Navegação principal">
+                <button type="button" onclick="abrirInicio()">🏠 Início</button>
                 <button type="button" onclick="abrirFormulario(true)">📝 Criar Boletim</button>
                 <button type="button" onclick="abrirLista()">📂 Ver Boletins</button>
                 <button type="button" id="gerenciamento-btn" onclick="abrirGerenciamento()" style="display: none;">⚙️ Gerenciamento</button>
@@ -191,9 +237,35 @@
 
                 <section id="tela-boas-vindas">
                     <h2>Bem-vindo ao Sistema de Boletins</h2>
-                    <p>Utilize o menu lateral para criar um novo boletim ou para visualizar os registros existentes.</p>
+                    <p>Utilize o menu lateral para navegar entre as seções do sistema.</p>
                 </section>
                 
+                <section id="tela-inicio" style="display: none;">
+                    <div class="perfil-agente">
+                        <h2>Perfil do Agente</h2>
+                        
+                        <!-- [NOVO] CAMPO DE IMAGEM DO PERFIL -->
+                        <div class="perfil-imagem-container">
+                            <img id="perfil-imagem" src="" alt="Foto do Perfil" onclick="document.getElementById('imagem-upload').click()">
+                            <div class="perfil-imagem-acoes">
+                                <button type="button" class="btn btn-neutro" onclick="document.getElementById('imagem-upload').click()">Alterar Foto</button>
+                                <button type="button" id="remover-foto-btn" class="btn btn-perigo" onclick="removerFotoPerfil()">Remover</button>
+                            </div>
+                            <input type="file" id="imagem-upload" accept="image/*" style="display: none;">
+                        </div>
+                        <!-- FIM DO CAMPO DE IMAGEM DO PERFIL -->
+
+                        <p><strong>Nome Completo:</strong> <span id="perfil-nome"></span></p>
+                        <p><strong>Patente:</strong> <span id="perfil-patente"></span></p>
+                        <p><strong>Usuário:</strong> <span id="perfil-usuario"></span></p>
+                        <p><strong>Tempo de Login:</strong> <span id="perfil-login-time">00:00:00</span></p>
+                    </div>
+                    <div class="lista-procurados">
+                        <h2>Procurados</h2>
+                        <div id="procurados-content" aria-live="polite"></div>
+                    </div>
+                </section>
+
                 <form class="formulario" id="formulario" style="display:none" onsubmit="event.preventDefault(); handleFormSubmit();">
                     <h2 id="form-title">Preencher Novo Boletim</h2>
                     <div class="form-section">
@@ -212,20 +284,7 @@
                         <div id="autores"></div>
                         <button type="button" class="btn btn-neutro" onclick="addAutor()">+ Adicionar Autor</button>
                     </div>
-                    <div class="form-section">
-                        <h3 style="display:flex; align-items:center; justify-content:space-between;">
-                            Acusações
-                            <button type="button" class="btn btn-neutro" id="toggleAcusaBtn">➕ Adicionar/Ver Acusações</button>
-                        </h3>
-                        <div id="acusaContainer" style="display:none;">
-                            <input type="text" id="buscaAcusacao" placeholder="Buscar acusação..." oninput="filtrarAcusacoesDisponiveis()" />
-                            <div id="acusaLista"></div>
-                        </div>
-                        <h4>Acusações Selecionadas:</h4>
-                        <div id="acusaSelecionadas"></div>
-                        <label>Pena Total (anos) + Multa:</label>
-                        <input type="text" id="penaTotal" readonly />
-                    </div>
+
                     <div class="form-section">
                         <h3>Local e Data da Ocorrência</h3>
                         <label for="localEndereco">Endereço</label>
@@ -258,14 +317,16 @@
                     <div class="form-section" id="form-add-user">
                         <h3 id="form-user-title">Adicionar Novo Usuário</h3>
                         <form onsubmit="event.preventDefault(); handleUserFormSubmit();">
+                            <label for="new-user-nome-completo">Nome Completo:</label>
+                            <input type="text" id="new-user-nome-completo" required>
+                            <label for="new-user-patente">Patente:</label>
+                            <input type="text" id="new-user-patente" required>
                             <label for="new-user-usuario">Usuário:</label>
                             <input type="text" id="new-user-usuario" required>
                             <label for="new-user-senha">Senha:</label>
                             <input type="password" id="new-user-senha" required>
                             <label for="new-user-categoria">Categoria:</label>
-                            <select id="new-user-categoria" required>
-                                <!-- Opções são preenchidas dinamicamente via JS -->
-                            </select>
+                            <select id="new-user-categoria" required></select>
                             <button type="submit" id="form-add-user-btn" class="btn btn-sucesso">Inserir</button>
                             <button type="button" onclick="resetUserForm()" id="cancel-edit-user-btn" class="btn btn-aviso" style="margin-left: 10px; display:none;">Cancelar Edição</button>
                         </form>
@@ -282,229 +343,389 @@
 
     <script>
         // --- CONFIGURAÇÃO E VARIÁVEIS GLOBAIS ---
-        const firebaseConfig = { apiKey: "AIzaSyA8IbT9OObCEjnAvIU27OTuRKS_0Unnxg4", authDomain: "tablet-teste-83fd3.firebaseapp.com", databaseURL: "https://tablet-teste-83fd3-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "tablet-teste-83fd3", storageBucket: "tablet-teste-83fd3.appspot.com", messagingSenderId: "831912559748", appId: "1:831912559748:web:05ae0cc311f61aa34aaed1" };
-        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const firebaseConfig = {
+            apiKey: "AIzaSyARi9fkG9niWxbHC0FLb2Rb7AKkWlR7Q_E",
+            authDomain: "dadosg-d8c2c.firebaseapp.com",
+            databaseURL: "https://dadosg-d8c2c-default-rtdb.firebaseio.com",
+            projectId: "dadosg-d8c2c",
+            storageBucket: "dadosg-d8c2c.appspot.com",
+            messagingSenderId: "95442504436",
+            appId: "1:95442504436:web:d8aca2a49a2c45f804aca1"
+        };
+        
+        if (!firebase.apps.length) { 
+            firebase.initializeApp(firebaseConfig); 
+        }
         const db = firebase.database();
         const acusacoesDisponiveis = [{ nome: "Homicídio Simples (Art. 121)", pena: 20, multa: 20000 },{ nome: "Homicídio Qualificado (Art. 121, § 2º)", pena: 30, multa: 30000 },{ nome: "Feminicídio (Art. 121, § 2º, VI)", pena: 30, multa: 30000 },{ nome: "Induzimento, Instigação ou Auxílio a Suicídio ou Automutilação (Art. 122)", pena: 6, multa: 6000 },{ nome: "Infanticídio (Art. 123)", pena: 6, multa: 6000 },{ nome: "Aborto Provocado pela Gestante ou com seu Consentimento (Art. 124)", pena: 3, multa: 3000 },{ nome: "Aborto Provocado por Terceiro (Art. 125)", pena: 10, multa: 10000 },{ nome: "Lesão Corporal Leve (Art. 129)", pena: 1, multa: 1000 },{ nome: "Lesão Corporal Grave (Art. 129, § 1º)", pena: 5, multa: 5000 },{ nome: "Lesão Corporal Gravíssima (Art. 129, § 2º)", pena: 8, multa: 8000 },{ nome: "Lesão Corporal Seguida de Morte (Art. 129, § 3º)", pena: 12, multa: 12000 },{ nome: "Violência Doméstica (Lei Maria da Penha) (Art. 129, § 9º)", pena: 3, multa: 3000 },{ nome: "Calúnia (Art. 138)", pena: 2, multa: 2000 },{ nome: "Difamação (Art. 139)", pena: 1, multa: 1000 },{ nome: "Injúria (Art. 140)", pena: 1, multa: 1000 },{ nome: "Ameaça (Art. 147)", pena: 1, multa: 1000 },{ nome: "Sequestro e Cárcere Privado (Art. 148)", pena: 5, multa: 5000 },{ nome: "Redução a Condição Análoga à de Escravo (Art. 149)", pena: 8, multa: 8000 },{ nome: "Furto Simples (Art. 155)", pena: 4, multa: 4000 },{ nome: "Furto Qualificado (Art. 155, § 4º)", pena: 8, multa: 8000 },{ nome: "Roubo (Art. 157)", pena: 10, multa: 10000 },{ nome: "Latrocínio (Roubo com resultado morte) (Art. 157, § 3º, II)", pena: 30, multa: 30000 },{ nome: "Extorsão (Art. 158)", pena: 10, multa: 10000 },{ nome: "Extorsão Mediante Sequestro (Art. 159)", pena: 15, multa: 15000 },{ nome: "Dano Simples (Art. 163)", pena: 1, multa: 1000 },{ nome: "Dano Qualificado (contra patrimônio público) (Art. 163, parágrafo único, III)", pena: 3, multa: 3000 },{ nome: "Apropriação Indébita (Art. 168)", pena: 4, multa: 4000 },{ nome: "Estelionato (Art. 171)", pena: 5, multa: 5000 },{ nome: "Receptação (Art. 180)", pena: 4, multa: 4000 },{ nome: "Estupro (Art. 213)", pena: 10, multa: 10000 },{ nome: "Estupro de Vulnerável (Art. 217-A)", pena: 15, multa: 15000 },{ nome: "Violação Sexual Mediante Fraude (Art. 215)", pena: 6, multa: 6000 },{ nome: "Assédio Sexual (Art. 216-A)", pena: 2, multa: 2000 },{ nome: "Importunação Sexual (Art. 215-A)", pena: 5, multa: 5000 },{ nome: "Casa de Prostituição (Art. 229)", pena: 5, multa: 5000 },{ nome: "Rufianismo (Tirar proveito da prostituição alheia) (Art. 230)", pena: 4, multa: 4000 },{ nome: "Incitação ao Crime (Art. 286)", pena: 1, multa: 1000 },{ nome: "Apologia de Crime ou Criminoso (Art. 287)", pena: 1, multa: 1000 },{ nome: "Associação Criminosa (Art. 288)", pena: 3, multa: 3000 },{ nome: "Moeda Falsa (Art. 289)", pena: 12, multa: 12000 },{ nome: "Falsificação de Documento Público (Art. 297)", pena: 6, multa: 6000 },{ nome: "Falsificação de Documento Particular (Art. 298)", pena: 5, multa: 5000 },{ nome: "Falsidade Ideológica (Art. 299)", pena: 5, multa: 5000 },{ nome: "Uso de Documento Falso (Art. 304)", pena: 6, multa: 6000 },{ nome: "Peculato (Art. 312)", pena: 12, multa: 12000 },{ nome: "Concussão (Exigir vantagem indevida) (Art. 316)", pena: 8, multa: 8000 },{ nome: "Corrupção Passiva (Art. 317)", pena: 12, multa: 12000 },{ nome: "Prevaricação (Art. 319)", pena: 1, multa: 1000 },{ nome: "Abandono de Função (Art. 323)", pena: 1, multa: 1000 },{ nome: "Resistência (Art. 329)", pena: 2, multa: 2000 },{ nome: "Desobediência (Art. 330)", pena: 1, multa: 1000 },{ nome: "Desacato (Art. 331)", pena: 2, multa: 2000 },{ nome: "Corrupção Ativa (Art. 333)", pena: 12, multa: 12000 },{ nome: "Contrabando ou Descaminho (Art. 334)", pena: 5, multa: 5000 },{ nome: "Denunciação Caluniosa (Art. 339)", pena: 8, multa: 8000 },{ nome: "Falso Testemunho ou Falsa Perícia (Art. 342)", pena: 4, multa: 4000 },{ nome: "Coação no Curso do Processo (Art. 344)", pena: 4, multa: 4000 },{ nome: "Favorecimento Pessoal (Ajudar a subtrair-se à ação da autoridade) (Art. 348)", pena: 1, multa: 1000 },{ nome: "Favorecimento Real (Prestar auxílio para tornar seguro o proveito do crime) (Art. 349)", pena: 1, multa: 1000 },{ nome: "Motim (Art. 149)", pena: 8, multa: 8000 },{ nome: "Revolta (Art. 149, Parágrafo único)", pena: 20, multa: 20000 },{ nome: "Conspiração (Art. 152)", pena: 4, multa: 4000 },{ nome: "Violência Contra Superior (Art. 157)", pena: 5, multa: 5000 },{ nome: "Violência Contra Militar de Serviço (Art. 158)", pena: 8, multa: 8000 },{ nome: "Desrespeito a Superior (Art. 160)", pena: 1, multa: 1000 },{ nome: "Insubordinação (Recusar obediência) (Art. 163)", pena: 2, multa: 2000 },{ nome: "Reunião Ilícita (Art. 165)", pena: 1, multa: 1000 },{ nome: "Deserção (Art. 187)", pena: 2, multa: 2000 },{ nome: "Deserção em Frente ao Inimigo (Art. 190)", pena: 30, multa: 30000 },{ nome: "Favorecimento a Desertor (Art. 193)", pena: 1, multa: 1000 },{ nome: "Abandono de Posto (Art. 195)", pena: 1, multa: 1000 },{ nome: "Descumprimento de Missão (Art. 196)", pena: 5, multa: 5000 },{ nome: "Embriaguez em Serviço (Art. 202)", pena: 2, multa: 2000 },{ nome: "Dormir em Serviço (Art. 203)", pena: 1, multa: 1000 },{ nome: "Homicídio Militar (Art. 205)", pena: 30, multa: 30000 },{ nome: "Lesão Corporal Militar (Leve) (Art. 209)", pena: 1, multa: 1000 },{ nome: "Lesão Corporal Militar (Grave) (Art. 209, §1)", pena: 5, multa: 5000 },{ nome: "Maus-tratos (Art. 213)", pena: 1, multa: 1000 },{ nome: "Genocídio (Art. 208)", pena: 30, multa: 30000 },{ nome: "Furto Militar (Art. 240)", pena: 6, multa: 6000 },{ nome: "Roubo Militar (Art. 242)", pena: 15, multa: 15000 },{ nome: "Extorsão Militar (Art. 243)", pena: 10, multa: 10000 },{ nome: "Dano em Material Militar (Art. 259)", pena: 5, multa: 5000 },{ nome: "Dano em Instalação Militar (Art. 261)", pena: 6, multa: 6000 },{ nome: "Desaparecimento de Munição (Art. 265)", pena: 3, multa: 3000 },{ nome: "Peculato Militar (Art. 303)", pena: 15, multa: 15000 },{ nome: "Concussão Militar (Art. 305)", pena: 8, multa: 8000 },{ nome: "Corrupção Passiva Militar (Art. 308)", pena: 8, multa: 8000 },{ nome: "Corrupção Ativa Militar (Art. 309)", pena: 8, multa: 8000 },{ nome: "Falsificação de Documento Militar (Art. 311)", pena: 5, multa: 5000 },{ nome: "Uso de Documento Falso (Militar) (Art. 315)", pena: 5, multa: 5000 },{ nome: "Desacato a Militar (Art. 299)", pena: 1, multa: 1000 },{ nome: "Desobediência Militar (Art. 301)", pena: 1, multa: 1000 },{ nome: "Inobservância de Lei ou Regulamento (Art. 324)", pena: 2, multa: 2000 },{ nome: "Traição (Art. 355)", pena: 30, multa: 30000 },{ nome: "Espionagem (Art. 366)", pena: 30, multa: 30000 },{ nome: "Vias de Fato (Agressão sem lesão) (Art. 21, LCP)", pena: 1, multa: 500 },{ nome: "Omissão de Cautela na Guarda de Animal Perigoso (Art. 31, LCP)", pena: 1, multa: 300 },{ nome: "Direção Perigosa de Veículo (Art. 34, LCP)", pena: 1, multa: 1500 },{ nome: "Perturbação do Sossego Alheio (Art. 42, LCP)", pena: 1, multa: 1000 },{ nome: "Exercício Ilegal de Profissão (Art. 47, LCP)", pena: 1, multa: 2000 },{ nome: "Exploração de Jogo de Azar (Art. 50, LCP)", pena: 1, multa: 2000 },{ nome: "Vadiagem (Art. 59, LCP)", pena: 1, multa: 500 },{ nome: "Mendicância (Art. 60, LCP - Revogado tacitamente)", pena: 1, multa: 100 },{ nome: "Perturbação da Tranquilidade (Art. 65, LCP)", pena: 1, multa: 800 },{ nome: "Recusa de Dados sobre a Própria Identidade (Art. 68, LCP)", pena: 1, multa: 600 },{ nome: "Portar Arma (Fora do alcance do Estatuto do Desarmamento) (Art. 19, LCP)", pena: 1, multa: 1500 },{ nome: "Homicídio Culposo no Trânsito (Art. 302) - CTB", pena: 4, multa: 4000 },{ nome: "Homicídio Culposo no Trânsito (Qualificado) (Art. 302, § 3º) - CTB", pena: 8, multa: 8000 },{ nome: "Lesão Corporal Culposa no Trânsito (Art. 303) - CTB", pena: 2, multa: 2000 },{ nome: "Omissão de Socorro no Trânsito (Art. 304) - CTB", pena: 1, multa: 1000 },{ nome: "Fuga do Local do Acidente (Art. 305) - CTB", pena: 1, multa: 1500 },{ nome: "Embriaguez ao Volante (Art. 306) - CTB", pena: 3, multa: 3000 },{ nome: "Violação da Suspensão do Direito de Dirigir (Art. 307) - CTB", pena: 1, multa: 1000 },{ nome: "Participar de 'Racha' (Art. 308) - CTB", pena: 3, multa: 3000 },{ nome: "Racha com Resultado Morte (Art. 308, § 2º) - CTB", pena: 10, multa: 10000 },{ nome: "Dirigir Sem Habilitação Gerando Perigo (Art. 309) - CTB", pena: 1, multa: 1000 },{ nome: "Entregar Veículo a Pessoa Não Habilitada (Art. 310) - CTB", pena: 1, multa: 1000 },{ nome: "Trafegar em Velocidade Incompatível (Art. 311) - CTB", pena: 1, multa: 1000 },{ nome: "Fraude Processual no Trânsito (Art. 312) - CTB", pena: 1, multa: 1500 }];
-        let boletinsCache = [], acusacoesSelecionadas = [], usuarioLogado = null, boletimEmEdicaoId = null, usuarioEmEdicaoId = null;
-        const mainScreens = ['tela-boas-vindas', 'formulario', 'lista', 'tela-gerenciamento'];
         
-        // --- INÍCIO DA SEÇÃO DE LOGS PARA O DISCORD ---
-        const webhookUrl = "https://discord.com/api/webhooks/1387946258475520050/P18o4gansakXPxnBu20N_sVuSd4XjOq2EY_Jtim4xtwzgVwk1V6OrdLH9GOFI3Vw5Xjw";
+        let boletinsCache = [], usuarioLogado = null, boletimEmEdicaoId = null, usuarioEmEdicaoId = null, loginTimestamp = null, loginTimerInterval = null;
+        
+        const mainScreens = ['tela-boas-vindas', 'formulario', 'lista', 'tela-gerenciamento', 'tela-inicio'];
+        const webhookUrl = "https://discord.com/api/webhooks/1388198001553703043/n-S0Xbv28RHzp-wpKPOvnLHs6YOoLcLDB1TQxmX13NL8alXtVEWHmv2zHtLt6uAWRGI7";
         const logColors = { SUCCESS: 3066993, DANGER: 15158332, WARNING: 16776960, INFO: 3447003 };
 
-        async function enviarLogParaDiscord(title, description, color) {
-            if (!usuarioLogado) { console.error("Tentativa de log sem usuário logado."); return; }
-            const payload = {
-                username: "Logs do Sistema PMERJ",
-                avatar_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Bras%C3%A3o_da_cidade_do_Rio_de_Janeiro.svg/1200px-Bras%C3%A3o_da_cidade_do_Rio_de_Janeiro.svg.png",
-                embeds: [{
-                    title: title,
-                    description: description,
-                    color: color,
-                    fields: [{ name: "Usuário da Ação", value: usuarioLogado.usuario, inline: true }, { name: "Data e Hora", value: new Date().toLocaleString("pt-BR"), inline: true }],
-                    footer: { text: `Sistema de Boletins - Categoria: ${usuarioLogado.categoria}` }
-                }]
-            };
-            try {
-                await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            } catch (error) { console.error("Erro ao enviar log para o Discord:", error); }
-        }
+        // [NOVO] Avatar padrão para usuários sem foto
+        const DEFAULT_AVATAR_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iY3VycmVudENvbG9yIiBjb2xvcj0iI2EwYzhmZiI+PHBhdGggZD0iTTEyIDJDNjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptMCA0YzEuOTMgMCAzLjUgMS41NyAzLjUgMy41UzEzLjkzIDEzIDEyIDEzcy0zLjUtMS41Ny0zLjUtMy41UzEwLjA3IDYgMTIgNnptMCAxNGMtMi4wMyAwLTQuNDMtLjgyLTYuMTQtMi44OGE5Ljk0NyA5Ljk0NyAwIDAgMSAxMi4yOCAwQzE2LjQzIDE5LjE4IDE0LjAzIDIwIDEyIDIweiI+PC9wYXRoPjwvc3ZnPg==';
 
-        /**
-         * Formata os dados de um boletim em uma string detalhada para logs.
-         * @param {object} boletim - O objeto do boletim a ser formatado.
-         * @returns {string} Uma string formatada com os detalhes do boletim.
-         */
-        function formatarDadosBoletimParaLog(boletim) {
-            const formatarPessoas = (pessoas) => {
-                if (!pessoas || pessoas.length === 0) return 'Nenhuma registrada.';
-                return pessoas.map(p => 
-                    `- Nome: ${p.nome || 'N/A'}\n` +
-                    `  - Nick: ${p.nick || 'N/A'}\n` +
-                    `  - Idade: ${p.idade || 'N/A'}\n` +
-                    `  - CPF/RG: ${p.cpf || 'N/A'}\n` +
-                    (p.contato ? `  - Contato: ${p.contato}\n` : '') +
-                    (p.estado ? `  - Estado Físico: ${p.estado}\n` : '') +
-                    (p.obs ? `  - Observação: ${p.obs}\n` : '')
-                ).join('\n');
-            };
-            let descricao = `**Oficial Responsável:** ${boletim.oficialResp || 'N/A'}\n`;
-            descricao += `**Pena + Multa Total:** ${boletim.penaMulta || 'N/A'}\n`;
-            descricao += `**Data do Fato:** ${boletim.localData ? new Date(boletim.localData).toLocaleString('pt-BR') : 'N/A'}\n\n`;
-            descricao += `**Oficiais Envolvidos:**\n\`\`\`\n${boletim.oficiais || 'Nenhum'}\n\`\`\`\n`;
-            descricao += `**Vítimas:**\n\`\`\`\n${formatarPessoas(boletim.vitimas)}\n\`\`\`\n`;
-            descricao += `**Autores:**\n\`\`\`\n${formatarPessoas(boletim.autores)}\n\`\`\`\n`;
-            descricao += `**Acusações:**\n\`\`\`\n${boletim.acusacoesSelecionadas && boletim.acusacoesSelecionadas.length > 0 ? boletim.acusacoesSelecionadas.join('\n') : 'Nenhuma'}\n\`\`\`\n`;
-            descricao += `**Local e Referência:**\n\`\`\`\nEndereço: ${boletim.localEndereco || 'N/A'}\nReferência: ${boletim.localReferencia || 'N/A'}\n\`\`\`\n`;
-            descricao += `**Relatório do Agente:**\n\`\`\`\n${boletim.relatoAgente || 'Nenhum relato.'}\n\`\`\``;
-            return descricao.length > 4000 ? descricao.substring(0, 4000) + "\n\n... (LOG TRUNCADO DEVIDO AO TAMANHO)" : descricao;
-        }
-        // --- FIM DA SEÇÃO DE LOGS PARA O DISCORD ---
-
-        // --- FUNÇÃO DE FEEDBACK VISUAL ---
-        function showFeedback(message, type = 'success') { const container = document.getElementById('feedback-container'); container.textContent = message; container.className = `show ${type === 'error' ? 'error' : ''}`; setTimeout(() => container.classList.remove('show'), 3000); }
-
-        // --- CONTROLE DE TELAS E AUTENTICAÇÃO ---
+        async function enviarLogParaDiscord(title, description, color) { if (!usuarioLogado) { console.error("Tentativa de log sem usuário logado."); return; } const payload = { username: "Logs do Sistema PMERJ", avatar_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Bras%C3%A3o_da_cidade_do_Rio_de_Janeiro.svg/1200px-Bras%C3%A3o_da_cidade_do_Rio_de_Janeiro.svg.png", embeds: [{ title: title, description: description, color: color, fields: [{ name: "Usuário da Ação", value: usuarioLogado.usuario, inline: true }, { name: "Data e Hora", value: new Date().toLocaleString("pt-BR"), inline: true }], footer: { text: `Sistema de Boletins - Categoria: ${usuarioLogado.categoria}` } }] }; try { await fetch(webhookUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); } catch (error) { console.error("Erro ao enviar log para o Discord:", error); } }
+        function formatarDadosBoletimParaLog(boletim) { const formatarPessoas = (pessoas) => { if (!pessoas || pessoas.length === 0) return 'Nenhuma registrada.'; return pessoas.map(p => `- Nome: ${p.nome||'N/A'}\n  - Nick: ${p.nick||'N/A'}\n  - Idade: ${p.idade||'N/A'}\n  - CPF/RG: ${p.cpf||'N/A'}\n` + (p.contato?`  - Contato: ${p.contato}\n`:'') + (p.estado?`  - Estado Físico: ${p.estado}\n`:'') + (p.obs?`  - Observação: ${p.obs}\n`:'')).join('\n'); }; const formatarAutores = (autores) => { if (!autores || autores.length === 0) return 'Nenhum registrado.'; return autores.map(a => `- (${a.tipoParticipacao || 'Autor'}) Nome: ${a.nome||'N/A'}, CPF/RG: ${a.cpf||'N/A'}\n  - Acusações: ${(a.acusacoes || []).map(ac => ac.nome).join(', ') || 'Nenhuma'}\n  - Pena Individual: ${a.penaMulta || 'N/A'}`).join('\n');}; let descricao = `**Oficial Responsável:** ${boletim.oficialResp||'N/A'}\n`; descricao += `**Data do Fato:** ${boletim.localData?new Date(boletim.localData).toLocaleString('pt-BR'):'N/A'}\n\n`; descricao += `**Oficiais Envolvidos:**\n\`\`\`\n${boletim.oficiais||'Nenhum'}\n\`\`\`\n`; descricao += `**Vítimas:**\n\`\`\`\n${formatarPessoas(boletim.vitimas)}\n\`\`\`\n`; descricao += `**Autores:**\n\`\`\`\n${formatarAutores(boletim.autores)}\n\`\`\`\n`; descricao += `**Local e Referência:**\n\`\`\`\nEndereço: ${boletim.localEndereco||'N/A'}\nReferência: ${boletim.localReferencia||'N/A'}\n\`\`\`\n`; descricao += `**Relatório do Agente:**\n\`\`\`\n${boletim.relatoAgente||'Nenhum relato.'}\n\`\`\``; return descricao.length > 4000 ? descricao.substring(0, 4000) + "\n\n... (LOG TRUNCADO DEVIDO AO TAMANHO)" : descricao; }
+        function showFeedback(message, type = 'success') { const container = document.getElementById('feedback-container'); container.textContent = message; container.className = `show ${type==='error'?'error':''}`; setTimeout(() => container.classList.remove('show'), 3000); }
         function mostrarTela(screenId) { mainScreens.forEach(id => document.getElementById(id).style.display = 'none'); document.getElementById(screenId).style.display = 'block'; }
-        function realizarLogin() {
-            const usuarioInput = document.getElementById('usuario').value;
-            const senhaInput = document.getElementById('senha').value;
-            const erroMsg = document.getElementById('login-error');
-            erroMsg.textContent = '';
-            db.ref('usuarios').once('value', snapshot => {
-                const users = snapshot.val() || {};
-                const ownerExists = Object.values(users).some(u => u.categoria === 'Owner');
-                if (!ownerExists) { const ownerUser = { usuario: 'Lipe', senha: '99881871', categoria: 'Owner' }; db.ref('usuarios').push(ownerUser); users['temp_owner_key'] = ownerUser; }
-                let usuarioValido = Object.entries(users).find(([, user]) => user.usuario === usuarioInput && user.senha === senhaInput);
-                if (usuarioValido) usuarioValido = { id: usuarioValido[0], ...usuarioValido[1] };
-                if (usuarioValido) {
-                    usuarioLogado = usuarioValido;
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.querySelector('.tablet').style.display = 'flex';
-                    const isManager = usuarioLogado.categoria === 'Administrador' || usuarioLogado.categoria === 'Owner';
-                    document.getElementById('gerenciamento-btn').style.display = isManager ? 'block' : 'none';
-                    abrirBoasVindas();
-                    inicializarListenerBoletins();
-                    filtrarAcusacoesDisponiveis();
-                    enviarLogParaDiscord('Login Realizado', `O usuário **${usuarioLogado.usuario}** acessou o sistema.`, logColors.INFO);
-                } else { erroMsg.textContent = 'Usuário ou senha inválidos.'; }
-            }).catch(error => { console.error("Erro no login:", error); erroMsg.textContent = "Erro de conexão com o banco de dados."; });
-        }
         
-        // --- NAVEGAÇÃO PRINCIPAL ---
+        function atualizarTempoDeLogin() { if (!loginTimestamp) return; const agora = new Date(); const elapsedMs = agora - loginTimestamp; const totalSeconds = Math.floor(elapsedMs / 1000); const hours = Math.floor(totalSeconds / 3600); const minutes = Math.floor((totalSeconds % 3600) / 60); const seconds = totalSeconds % 60; const formattedTime = [String(hours).padStart(2, '0'), String(minutes).padStart(2, '0'), String(seconds).padStart(2, '0')].join(':'); const timeElement = document.getElementById('perfil-login-time'); if (timeElement) { timeElement.textContent = formattedTime; } }
+
+        function realizarLogin() { const usuarioInput = document.getElementById('usuario').value; const senhaInput = document.getElementById('senha').value; const erroMsg = document.getElementById('login-error'); erroMsg.textContent = ''; db.ref('usuarios').once('value', snapshot => { const users = snapshot.val() || {}; const ownerExists = Object.values(users).some(u => u.categoria === 'Owner'); if (!ownerExists) { const ownerUser = { usuario: 'Lipe', senha: '99881871', categoria: 'Owner', nomeCompleto: 'LipeDEV', patente: 'Desenvolvedor Chefe' }; db.ref('usuarios').push(ownerUser); users['temp_owner_key'] = ownerUser; } let usuarioValido = Object.entries(users).find(([, user]) => user.usuario === usuarioInput && user.senha === senhaInput); if (usuarioValido) usuarioValido = { id: usuarioValido[0], ...usuarioValido[1] }; if (usuarioValido) { usuarioLogado = usuarioValido; loginTimestamp = new Date(); if (loginTimerInterval) clearInterval(loginTimerInterval); loginTimerInterval = setInterval(atualizarTempoDeLogin, 1000); document.getElementById('login-screen').style.display = 'none'; document.querySelector('.tablet').style.display = 'flex'; 
+        const isManager = ['Administrador', 'Owner', 'Oficial'].includes(usuarioLogado.categoria);
+        document.getElementById('gerenciamento-btn').style.display = isManager ? 'block' : 'none'; abrirInicio(); inicializarListenerBoletins(); enviarLogParaDiscord('Login Realizado', `O usuário **${usuarioLogado.usuario}** acessou o sistema.`, logColors.INFO); } else { erroMsg.textContent = 'Usuário ou senha inválidos.'; } }).catch(error => { console.error("Erro no login:", error); erroMsg.textContent = "Erro de conexão com o banco de dados."; }); }
+        
         const abrirBoasVindas = () => mostrarTela('tela-boas-vindas');
-        const abrirLista = () => { mostrarTela('lista'); renderizarBoletins(); };
-        const abrirGerenciamento = () => {
-            mostrarTela('tela-gerenciamento');
+
+        // --- [MODIFICADO] Função `abrirInicio` para incluir a lógica da imagem de perfil ---
+        function abrirInicio() {
+            mostrarTela('tela-inicio');
+            document.getElementById('perfil-nome').textContent = usuarioLogado.nomeCompleto || 'Não informado';
+            document.getElementById('perfil-patente').textContent = usuarioLogado.patente || 'Não informada';
+            document.getElementById('perfil-usuario').textContent = usuarioLogado.usuario;
+            
+            // Lógica da imagem de perfil
+            const imgElement = document.getElementById('perfil-imagem');
+            const removeBtn = document.getElementById('remover-foto-btn');
+            if (usuarioLogado.profileImage) {
+                imgElement.src = usuarioLogado.profileImage;
+                removeBtn.style.display = 'inline-block';
+            } else {
+                imgElement.src = DEFAULT_AVATAR_URL;
+                removeBtn.style.display = 'none';
+            }
+
+            atualizarTempoDeLogin();
+            renderizarProcurados();
+        }
+        function abrirLista(boletimIdParaExpandir = null) { mostrarTela('lista'); const pesquisaInput = document.getElementById('pesquisa'); if (boletimIdParaExpandir) { const boletim = boletinsCache.find(b => b.id === boletimIdParaExpandir); if (boletim && boletim.numeroBOPM) { pesquisaInput.value = `BOPM Nº ${String(boletim.numeroBOPM).padStart(3, '0')}`; } else { pesquisaInput.value = ''; } } else { pesquisaInput.value = ''; } renderizarBoletins(boletimIdParaExpandir); }
+        
+        const abrirGerenciamento = () => { 
+            mostrarTela('tela-gerenciamento'); 
             const selectCategoria = document.getElementById('new-user-categoria');
-            selectCategoria.innerHTML = '';
-            if (usuarioLogado.categoria === 'Owner') { selectCategoria.innerHTML = `<option value="Policial">Policial</option><option value="Administrador">Administrador</option><option value="Owner">Owner</option>`; }
-            else if (usuarioLogado.categoria === 'Administrador') { selectCategoria.innerHTML = `<option value="Policial">Policial</option>`; }
-            inicializarListenerUsuarios();
+            selectCategoria.innerHTML = ''; 
+            
+            if (usuarioLogado.categoria === 'Owner') { 
+                selectCategoria.innerHTML = `
+                    <option value="Policial">Policial</option>
+                    <option value="Oficial">Oficial</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Owner">Owner</option>`; 
+            } else if (usuarioLogado.categoria === 'Administrador') { 
+                selectCategoria.innerHTML = `
+                    <option value="Policial">Policial</option>
+                    <option value="Oficial">Oficial</option>`; 
+            } else if (usuarioLogado.categoria === 'Oficial') {
+                selectCategoria.innerHTML = `<option value="Policial">Policial</option>`;
+            }
+            
+            inicializarListenerUsuarios(); 
         };
-        function abrirFormulario(limpar = false) {
-            mostrarTela('formulario');
-            if (limpar) {
-                boletimEmEdicaoId = null;
-                document.getElementById('formulario').reset();
-                ['vitimas', 'autores', 'acusaSelecionadas'].forEach(id => document.getElementById(id).innerHTML = '');
-                acusacoesSelecionadas = [];
-                atualizarAcusaSelecionadas();
-                document.getElementById('formSubmitButton').textContent = 'Enviar Boletim';
-                document.getElementById('form-title').textContent = 'Preencher Novo Boletim';
+
+        function abrirFormulario(limpar = false) { mostrarTela('formulario'); if (limpar) { boletimEmEdicaoId = null; document.getElementById('formulario').reset(); ['vitimas', 'autores'].forEach(id => document.getElementById(id).innerHTML = ''); document.getElementById('formSubmitButton').textContent = 'Enviar Boletim'; document.getElementById('form-title').textContent = 'Preencher Novo Boletim'; } }
+        
+        // --- [NOVAS FUNÇÕES] Para gerenciar a imagem de perfil ---
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) { // Limite de 2MB para não sobrecarregar o DB
+                showFeedback('A imagem é muito grande. O limite é de 2MB.', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Url = e.target.result;
+                db.ref('usuarios/' + usuarioLogado.id).update({ profileImage: base64Url })
+                    .then(() => {
+                        usuarioLogado.profileImage = base64Url; // Atualiza o estado local
+                        document.getElementById('perfil-imagem').src = base64Url;
+                        document.getElementById('remover-foto-btn').style.display = 'inline-block';
+                        showFeedback('Foto de perfil atualizada com sucesso!');
+                        enviarLogParaDiscord('Foto de Perfil Alterada', `O usuário **${usuarioLogado.usuario}** alterou a própria foto de perfil.`, logColors.INFO);
+                    })
+                    .catch(err => showFeedback("Erro ao salvar a foto: " + err.message, 'error'));
+            };
+            reader.onerror = () => showFeedback('Não foi possível ler o arquivo da imagem.', 'error');
+            reader.readAsDataURL(file);
+            event.target.value = ''; // Reseta o input para permitir selecionar o mesmo arquivo novamente
+        }
+
+        function removerFotoPerfil() {
+            if (confirm('Tem certeza que deseja remover sua foto de perfil?')) {
+                db.ref('usuarios/' + usuarioLogado.id).update({ profileImage: null })
+                    .then(() => {
+                        usuarioLogado.profileImage = null; // Atualiza o estado local
+                        document.getElementById('perfil-imagem').src = DEFAULT_AVATAR_URL;
+                        document.getElementById('remover-foto-btn').style.display = 'none';
+                        showFeedback('Foto de perfil removida com sucesso!');
+                        enviarLogParaDiscord('Foto de Perfil Removida', `O usuário **${usuarioLogado.usuario}** removeu a própria foto de perfil.`, logColors.INFO);
+                    })
+                    .catch(err => showFeedback("Erro ao remover a foto: " + err.message, 'error'));
             }
         }
+        // --- FIM DAS NOVAS FUNÇÕES ---
 
-        // --- GERENCIAMENTO DE USUÁRIOS ---
-        function inicializarListenerUsuarios() { db.ref('usuarios').on('value', snapshot => { const container = document.getElementById('lista-usuarios'); container.innerHTML = ''; const users = snapshot.val(); if (users) { Object.entries(users).forEach(([id, user]) => { const userItem = document.createElement('div'); userItem.className = 'user-item'; const podeGerenciar = usuarioLogado.categoria === 'Owner' || (usuarioLogado.categoria === 'Administrador' && user.categoria !== 'Owner'); let senhaHtml = ''; if (user.categoria === 'Owner') { senhaHtml = `<div><strong>Senha:</strong> <span>••••••••</span></div>`; } else if (podeGerenciar) { senhaHtml = `<div class="password-field" onclick="togglePassword(this)"><strong>Senha:</strong> <span data-password="${user.senha}">••••••••</span></div>`; } else { senhaHtml = `<div><strong>Senha:</strong> <span>Acesso Restrito</span></div>`; } let acoesHtml = ''; if (podeGerenciar && usuarioLogado.id !== id) { acoesHtml = `<div class="user-actions"><button class="btn btn-secundario" onclick="prepararEdicaoUsuario('${id}', '${user.usuario}', '${user.senha}', '${user.categoria}')">Editar</button><button class="btn btn-perigo" onclick="excluirUsuario('${id}', '${user.usuario}', '${user.categoria}')">Excluir</button></div>`; } userItem.innerHTML = `<div class="user-info"><div><strong>Usuário:</strong> ${user.usuario}</div>${senhaHtml}<div><strong>Categoria:</strong> ${user.categoria}</div></div>${acoesHtml}`; container.appendChild(userItem); }); } else { container.innerHTML = '<p>Nenhum usuário cadastrado.</p>'; } }); }
+        function podeGerenciarUsuario(categoriaGerente, categoriaAlvo) {
+            if (categoriaGerente === 'Owner') return true;
+            if (categoriaGerente === 'Administrador' && ['Policial', 'Oficial'].includes(categoriaAlvo)) return true;
+            if (categoriaGerente === 'Oficial' && categoriaAlvo === 'Policial') return true;
+            return false;
+        }
+        
+        function inicializarListenerUsuarios() { db.ref('usuarios').on('value', snapshot => { const container = document.getElementById('lista-usuarios'); container.innerHTML = ''; const users = snapshot.val(); if (users) { Object.entries(users).forEach(([id, user]) => { const userItem = document.createElement('div'); userItem.className = 'user-item'; 
+        const podeGerenciar = podeGerenciarUsuario(usuarioLogado.categoria, user.categoria);
+        let senhaHtml = ''; if (podeGerenciar || usuarioLogado.categoria === 'Owner') { senhaHtml = `<div class="password-field" onclick="togglePassword(this)"><strong>Senha:</strong> <span data-password="${user.senha}">••••••••</span></div>`; } else { senhaHtml = `<div><strong>Senha:</strong> <span>Acesso Restrito</span></div>`; } let acoesHtml = ''; if (podeGerenciar && usuarioLogado.id !== id) { acoesHtml = `<div class="user-actions"><button class="btn btn-secundario" onclick="prepararEdicaoUsuario('${id}', '${user.usuario}', '${user.senha}', '${user.categoria}', '${user.nomeCompleto || ''}', '${user.patente || ''}')">Editar</button><button class="btn btn-perigo" onclick="excluirUsuario('${id}', '${user.usuario}', '${user.categoria}')">Excluir</button></div>`; } userItem.innerHTML = `<div class="user-info"><div><strong>Usuário:</strong> ${user.usuario}</div><div><strong>Nome:</strong> ${user.nomeCompleto || 'N/A'}</div><div><strong>Patente:</strong> ${user.patente || 'N/A'}</div>${senhaHtml}<div><strong>Categoria:</strong> ${user.categoria}</div></div>${acoesHtml}`; container.appendChild(userItem); }); } else { container.innerHTML = '<p>Nenhum usuário cadastrado.</p>'; } }); }
+        
         function togglePassword(element) { const span = element.querySelector('span'); span.textContent = span.textContent.includes('•') ? span.dataset.password : '••••••••'; }
         const handleUserFormSubmit = () => usuarioEmEdicaoId ? atualizarUsuario() : adicionarUsuario();
-        function adicionarUsuario() { const newUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!newUser.usuario || !newUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios').push(newUser).then(() => { showFeedback("Usuário adicionado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Criado', `Criou o usuário **${newUser.usuario}** (Categoria: ${newUser.categoria}).`, logColors.SUCCESS); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
-        function prepararEdicaoUsuario(id, usuario, senha, categoriaAlvo) { if (usuarioLogado.categoria === 'Administrador' && categoriaAlvo === 'Owner') { showFeedback("Administradores não podem editar usuários da categoria Owner.", 'error'); return; } usuarioEmEdicaoId = id; document.getElementById('new-user-usuario').value = usuario; document.getElementById('new-user-senha').value = senha; document.getElementById('new-user-senha').type = 'text'; document.getElementById('new-user-categoria').value = categoriaAlvo; document.getElementById('form-user-title').textContent = "Editando Usuário"; document.getElementById('form-add-user-btn').textContent = "Atualizar"; document.getElementById('cancel-edit-user-btn').style.display = 'inline-block'; document.getElementById('form-add-user').scrollIntoView({ behavior: 'smooth' }); }
-        function atualizarUsuario() { const updatedUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value }; if (!updatedUser.usuario || !updatedUser.senha) { showFeedback("Usuário e senha são obrigatórios.", 'error'); return; } db.ref('usuarios/' + usuarioEmEdicaoId).update(updatedUser).then(() => { showFeedback("Usuário atualizado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Editado', `Editou os dados do usuário **${updatedUser.usuario}**.`, logColors.WARNING); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
-        function excluirUsuario(id, nomeUsuario, categoriaAlvo) { if (usuarioLogado.id === id) { showFeedback("Você não pode excluir seu próprio usuário.", 'error'); return; } if (usuarioLogado.categoria === 'Administrador' && categoriaAlvo === 'Owner') { showFeedback("Administradores não podem excluir usuários da categoria Owner.", 'error'); return; } if (confirm(`Tem certeza que deseja excluir o usuário "${nomeUsuario}"?`)) { db.ref('usuarios/' + id).remove().then(() => { showFeedback("Usuário excluído com sucesso."); enviarLogParaDiscord('Usuário Excluído', `Excluiu o usuário **${nomeUsuario}**.`, logColors.DANGER); }).catch(err => showFeedback("Erro: " + err.message, 'error')); } }
-        function resetUserForm() { usuarioEmEdicaoId = null; document.querySelector('#form-add-user form').reset(); document.getElementById('new-user-senha').type = 'password'; document.getElementById('form-user-title').textContent = "Adicionar Novo Usuário"; document.getElementById('form-add-user-btn').textContent = "Inserir"; document.getElementById('cancel-edit-user-btn').style.display = 'none'; }
-
-        // --- BOLETINS ---
-        function addVitima(v = {}) { document.getElementById('vitimas').insertAdjacentHTML('beforeend', `<div><button class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button><input placeholder="Nome" value="${v.nome||''}"><input placeholder="Nick" value="${v.nick||''}"><input type="number" placeholder="Idade" value="${v.idade||''}"><input placeholder="CPF/RG" value="${v.cpf||''}"><input placeholder="Observação" value="${v.obs||''}"></div>`); }
-        function addAutor(a = {}) { document.getElementById('autores').insertAdjacentHTML('beforeend', `<div><button class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button><input placeholder="Nome" value="${a.nome||''}"><input placeholder="Nick" value="${a.nick||''}"><input type="number" placeholder="Idade" value="${a.idade||''}"><input placeholder="Contato" value="${a.contato||''}"><input placeholder="Estado Físico" value="${a.estado||''}"><input placeholder="CPF/RG" value="${a.cpf||''}"></div>`); }
-        document.getElementById('toggleAcusaBtn').addEventListener('click', function() { const container = document.getElementById('acusaContainer'); const isExpanded = container.style.display === 'block'; container.style.display = isExpanded ? 'none' : 'block'; this.innerHTML = isExpanded ? '➖ Fechar Acusações' : '➕ Adicionar/Ver Acusações'; });
-        filtrarAcusacoesDisponiveis = function() { const filtro = document.getElementById('buscaAcusacao').value.toLowerCase(); const lista = document.getElementById('acusaLista'); lista.innerHTML = ''; acusacoesDisponiveis.forEach(a => { if (a.nome.toLowerCase().includes(filtro) && !acusacoesSelecionadas.some(sa => sa.nome === a.nome)) { const el = document.createElement('div'); el.innerHTML = `<strong>${a.nome}</strong><button class="btn btn-sucesso" onclick="toggleAcusacao('${a.nome}')">+</button>`; lista.appendChild(el); } }); };
-        toggleAcusacao = function(nome) { const index = acusacoesSelecionadas.findIndex(a => a.nome === nome); if (index === -1) { const acus = acusacoesDisponiveis.find(a => a.nome === nome); if (acus) acusacoesSelecionadas.push(acus); } else { acusacoesSelecionadas.splice(index, 1); } atualizarAcusaSelecionadas(); filtrarAcusacoesDisponiveis(); };
-        atualizarAcusaSelecionadas = function() { const container = document.getElementById('acusaSelecionadas'); container.innerHTML = ''; let penaTotal = 0, multaTotal = 0; acusacoesSelecionadas.forEach(a => { penaTotal += a.pena; multaTotal += a.multa; const div = document.createElement('div'); div.innerHTML = `${a.nome} <button class="btn btn-perigo" onclick="toggleAcusacao('${a.nome}')">X</button>`; container.appendChild(div); }); document.getElementById('penaTotal').value = `${penaTotal} anos + R$${multaTotal.toLocaleString('pt-BR')}`; };
-        coletarDadosDoFormulario = function() { const v = [...document.querySelectorAll('#vitimas > div')].map(d => ({ nome: d.children[1].value, nick: d.children[2].value, idade: d.children[3].value, cpf: d.children[4].value, obs: d.children[5].value })); const a = [...document.querySelectorAll('#autores > div')].map(d => ({ nome: d.children[1].value, nick: d.children[2].value, idade: d.children[3].value, contato: d.children[4].value, estado: d.children[5].value, cpf: d.children[6].value })); return { oficialResp: document.getElementById('oficialResp').value, oficiais: document.getElementById('oficiais').value, vitimas: v.filter(i=>i.nome), autores: a.filter(i=>i.nome), acusacoesSelecionadas: acusacoesSelecionadas.map(ac=>ac.nome), localEndereco: document.getElementById('localEndereco').value, localReferencia: document.getElementById('localReferencia').value, localData: document.getElementById('localData').value, relatoAgente: document.getElementById('relatoAgente').value, penaMulta: document.getElementById('penaTotal').value }; };
+        function adicionarUsuario() { const newUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value, nomeCompleto: document.getElementById('new-user-nome-completo').value.trim(), patente: document.getElementById('new-user-patente').value.trim() }; if (!newUser.usuario || !newUser.senha || !newUser.nomeCompleto || !newUser.patente) { showFeedback("Todos os campos são obrigatórios.", 'error'); return; } db.ref('usuarios').push(newUser).then(() => { showFeedback("Usuário adicionado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Criado', `Criou o usuário **${newUser.usuario}** (Categoria: ${newUser.categoria}).`, logColors.SUCCESS); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
         
+        function prepararEdicaoUsuario(id, usuario, senha, categoriaAlvo, nomeCompleto, patente) {
+            if (!podeGerenciarUsuario(usuarioLogado.categoria, categoriaAlvo)) {
+                showFeedback("Você não tem permissão para editar este usuário.", 'error');
+                return;
+            }
+            usuarioEmEdicaoId = id; 
+            document.getElementById('new-user-nome-completo').value = nomeCompleto; 
+            document.getElementById('new-user-patente').value = patente; 
+            document.getElementById('new-user-usuario').value = usuario; 
+            document.getElementById('new-user-senha').value = senha; 
+            document.getElementById('new-user-senha').type = 'text'; 
+            document.getElementById('new-user-categoria').value = categoriaAlvo; 
+            document.getElementById('form-user-title').textContent = "Editando Usuário"; 
+            document.getElementById('form-add-user-btn').textContent = "Atualizar"; 
+            document.getElementById('cancel-edit-user-btn').style.display = 'inline-block'; 
+            document.getElementById('form-add-user').scrollIntoView({ behavior: 'smooth' }); 
+        }
+
+        function atualizarUsuario() { const updatedUser = { usuario: document.getElementById('new-user-usuario').value.trim(), senha: document.getElementById('new-user-senha').value.trim(), categoria: document.getElementById('new-user-categoria').value, nomeCompleto: document.getElementById('new-user-nome-completo').value.trim(), patente: document.getElementById('new-user-patente').value.trim() }; if (!updatedUser.usuario || !updatedUser.senha || !updatedUser.nomeCompleto || !updatedUser.patente) { showFeedback("Todos os campos são obrigatórios.", 'error'); return; } db.ref('usuarios/' + usuarioEmEdicaoId).update(updatedUser).then(() => { showFeedback("Usuário atualizado com sucesso!"); resetUserForm(); enviarLogParaDiscord('Usuário Editado', `Editou os dados do usuário **${updatedUser.usuario}**.`, logColors.WARNING); }).catch(err => showFeedback("Erro: " + err.message, 'error')); }
+        
+        function excluirUsuario(id, nomeUsuario, categoriaAlvo) {
+            if (usuarioLogado.id === id) { 
+                showFeedback("Você não pode excluir seu próprio usuário.", 'error'); 
+                return; 
+            }
+            if (!podeGerenciarUsuario(usuarioLogado.categoria, categoriaAlvo)) {
+                showFeedback("Você não tem permissão para excluir este usuário.", 'error');
+                return;
+            }
+            if (confirm(`Tem certeza que deseja excluir o usuário "${nomeUsuario}"?`)) { 
+                db.ref('usuarios/' + id).remove().then(() => { 
+                    showFeedback("Usuário excluído com sucesso."); 
+                    enviarLogParaDiscord('Usuário Excluído', `Excluiu o usuário **${nomeUsuario}**.`, logColors.DANGER); 
+                }).catch(err => showFeedback("Erro: " + err.message, 'error')); 
+            } 
+        }
+
+        function resetUserForm() { usuarioEmEdicaoId = null; document.querySelector('#form-add-user form').reset(); document.getElementById('new-user-senha').type = 'password'; document.getElementById('form-user-title').textContent = "Adicionar Novo Usuário"; document.getElementById('form-add-user-btn').textContent = "Inserir"; document.getElementById('cancel-edit-user-btn').style.display = 'none'; }
+        
+        function addVitima(v = {}) { document.getElementById('vitimas').insertAdjacentHTML('beforeend', `<div><button type="button" class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button><input placeholder="Nome" value="${v.nome||''}"><input placeholder="Nick" value="${v.nick||''}"><input type="number" placeholder="Idade" value="${v.idade||''}"><input placeholder="CPF/RG" value="${v.cpf||''}"><input placeholder="Observação" value="${v.obs||''}"></div>`); }
+        
+        function addAutor(a = {}) {
+            const autoresContainer = document.getElementById('autores');
+            const autorIndex = autoresContainer.children.length;
+            const tipo = a.tipoParticipacao || 'Autor';
+            const autorHTML = `
+                <div class="autor-container" data-index="${autorIndex}">
+                    <button type="button" class="btn btn-perigo remove-item-btn" onclick="this.parentElement.remove()">X</button>
+                    <input placeholder="Nome" value="${a.nome || ''}">
+                    <input placeholder="Nick" value="${a.nick || ''}">
+                    <input type="number" placeholder="Idade" value="${a.idade || ''}">
+                    <input placeholder="Contato" value="${a.contato || ''}">
+                    <input placeholder="Estado Físico" value="${a.estado || ''}">
+                    <input placeholder="CPF/RG" value="${a.cpf || ''}">
+                    <label>Tipo de Participação:</label>
+                    <select>
+                        <option value="Autor" ${tipo === 'Autor' ? 'selected' : ''}>Autor</option>
+                        <option value="Coautor" ${tipo === 'Coautor' ? 'selected' : ''}>Coautor</option>
+                        <option value="Participante" ${tipo === 'Participante' ? 'selected' : ''}>Participante</option>
+                    </select>
+                    <div class="acusa-sub-section">
+                        <h4 style="display:flex; align-items:center; justify-content:space-between; margin-top: 0;">
+                            Acusações do Autor
+                            <button type="button" class="btn btn-neutro toggle-acusa-btn" onclick="toggleAutorAcusaContainer(this)">➕</button>
+                        </h4>
+                        <div class="acusa-container" style="display:none;">
+                            <input type="text" placeholder="Buscar acusação..." oninput="filtrarAcusacoesDisponiveis(this)" />
+                            <div class="acusa-lista-disponivel"></div>
+                        </div>
+                        <h5>Acusações Selecionadas:</h5>
+                        <div class="acusa-lista-selecionada"></div>
+                        <label>Pena Individual (anos) + Multa:</label>
+                        <input type="text" class="pena-total-autor" readonly />
+                    </div>
+                </div>
+            `;
+            autoresContainer.insertAdjacentHTML('beforeend', autorHTML);
+            const novoAutorDiv = autoresContainer.lastElementChild;
+            novoAutorDiv.dataset.acusacoes = JSON.stringify(a.acusacoes || []);
+            atualizarAcusaSelecionadas(novoAutorDiv);
+            filtrarAcusacoesDisponiveis(novoAutorDiv.querySelector('input[type="text"]'));
+        }
+
+        function toggleAutorAcusaContainer(button) {
+            const container = button.closest('.acusa-sub-section').querySelector('.acusa-container');
+            const isExpanded = container.style.display === 'block';
+            container.style.display = isExpanded ? 'none' : 'block';
+            button.innerHTML = isExpanded ? '➖' : '➕';
+        }
+
+        function filtrarAcusacoesDisponiveis(inputElement) {
+            const autorContainer = inputElement.closest('.autor-container');
+            const filtro = inputElement.value.toLowerCase();
+            const listaDisponivel = autorContainer.querySelector('.acusa-lista-disponivel');
+            const acusacoesSelecionadas = JSON.parse(autorContainer.dataset.acusacoes || '[]');
+
+            listaDisponivel.innerHTML = '';
+            acusacoesDisponiveis.forEach(a => {
+                if (a.nome.toLowerCase().includes(filtro) && !acusacoesSelecionadas.some(sa => sa.nome === a.nome)) {
+                    const el = document.createElement('div');
+                    el.innerHTML = `<strong>${a.nome}</strong><button type="button" class="btn btn-sucesso" onclick="toggleAcusacao(this, '${a.nome}')">+</button>`;
+                    listaDisponivel.appendChild(el);
+                }
+            });
+        }
+        
+        function toggleAcusacao(button, nomeAcusacao) {
+            const autorContainer = button.closest('.autor-container');
+            let acusacoesAtuais = JSON.parse(autorContainer.dataset.acusacoes || '[]');
+            const index = acusacoesAtuais.findIndex(a => a.nome === nomeAcusacao);
+            if (index === -1) {
+                const acusacaoObj = acusacoesDisponiveis.find(a => a.nome === nomeAcusacao);
+                if (acusacaoObj) acusacoesAtuais.push(acusacaoObj);
+            } else {
+                acusacoesAtuais.splice(index, 1);
+            }
+            autorContainer.dataset.acusacoes = JSON.stringify(acusacoesAtuais);
+            atualizarAcusaSelecionadas(autorContainer);
+            filtrarAcusacoesDisponiveis(autorContainer.querySelector('input[type="text"]'));
+        }
+
+        function atualizarAcusaSelecionadas(autorContainer) {
+            const listaSelecionada = autorContainer.querySelector('.acusa-lista-selecionada');
+            const inputPenaTotal = autorContainer.querySelector('.pena-total-autor');
+            const acusacoes = JSON.parse(autorContainer.dataset.acusacoes || '[]');
+            listaSelecionada.innerHTML = '';
+            let penaTotal = 0, multaTotal = 0;
+            acusacoes.forEach(a => {
+                penaTotal += a.pena;
+                multaTotal += a.multa;
+                const div = document.createElement('div');
+                div.innerHTML = `${a.nome} <button type="button" class="btn btn-perigo" onclick="toggleAcusacao(this, '${a.nome}')">X</button>`;
+                listaSelecionada.appendChild(div);
+            });
+            inputPenaTotal.value = `${penaTotal} anos + R$${multaTotal.toLocaleString('pt-BR')}`;
+        }
+        
+        coletarDadosDoFormulario = function() {
+            const v = [...document.querySelectorAll('#vitimas > div')].map(d => ({ nome: d.children[1].value, nick: d.children[2].value, idade: d.children[3].value, cpf: d.children[4].value, obs: d.children[5].value }));
+            const a = [...document.querySelectorAll('#autores > .autor-container')].map(d => ({ nome: d.children[1].value, nick: d.children[2].value, idade: d.children[3].value, contato: d.children[4].value, estado: d.children[5].value, cpf: d.children[6].value, tipoParticipacao: d.children[8].value, acusacoes: JSON.parse(d.dataset.acusacoes || '[]'), penaMulta: d.querySelector('.pena-total-autor').value }));
+            return { oficialResp: document.getElementById('oficialResp').value, oficiais: document.getElementById('oficiais').value, vitimas: v.filter(i=>i.nome), autores: a.filter(i=>i.nome), localEndereco: document.getElementById('localEndereco').value, localReferencia: document.getElementById('localReferencia').value, localData: document.getElementById('localData').value, relatoAgente: document.getElementById('relatoAgente').value }; 
+        };
         const handleFormSubmit = () => boletimEmEdicaoId ? atualizarBoletim() : enviarBoletim();
-
-        function enviarBoletim() {
-            if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; }
-            const counterRef = db.ref('metadata/boletimCounter');
-            counterRef.transaction(currentCount => (currentCount || 0) + 1)
-            .then(result => {
-                if (!result.committed) { showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error'); return; }
-                const novoNumeroBOPM = result.snapshot.val();
-                const boletim = coletarDadosDoFormulario();
-                boletim.criadoEm = new Date().toISOString();
-                boletim.numeroBOPM = novoNumeroBOPM; 
-                return db.ref('boletins').push(boletim).then(() => {
-                    const numeroFormatado = String(novoNumeroBOPM).padStart(3, '0');
-                    showFeedback(`Boletim BOPM Nº ${numeroFormatado} criado com sucesso!`);
-                    const logDescription = formatarDadosBoletimParaLog(boletim);
-                    enviarLogParaDiscord(`✅ Novo Boletim Criado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.SUCCESS);
-                    abrirLista();
-                });
-            }).catch(e => { console.error("Erro na transação do contador:", e); showFeedback('Erro crítico ao gerar número do boletim: ' + e.message, 'error'); });
-        }
-
-        function atualizarBoletim() { 
-            if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; } 
-            const boletim = coletarDadosDoFormulario(); 
-            boletim.atualizadoEm = new Date().toISOString(); 
-            db.ref('boletins/' + boletimEmEdicaoId).update(boletim).then(() => { 
-                const boletimEditado = boletinsCache.find(b => b.id === boletimEmEdicaoId);
-                const numeroFormatado = boletimEditado ? String(boletimEditado.numeroBOPM).padStart(3, '0') : `ID ${boletimEmEdicaoId}`;
-                showFeedback('Boletim atualizado com sucesso!'); 
-                const logDescription = formatarDadosBoletimParaLog(boletim);
-                enviarLogParaDiscord(`✏️ Boletim Editado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.WARNING);
-                abrirLista(); 
-            }).catch(e => showFeedback('Erro: ' + e.message, 'error')); 
-        }
+        function enviarBoletim() { if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; } const counterRef = db.ref('metadata/boletimCounter'); counterRef.transaction(currentCount => (currentCount || 0) + 1).then(result => { if (!result.committed) { showFeedback('Não foi possível gerar o número do boletim. Tente novamente.', 'error'); return; } const novoNumeroBOPM = result.snapshot.val(); const boletim = coletarDadosDoFormulario(); boletim.criadoEm = new Date().toISOString(); boletim.numeroBOPM = novoNumeroBOPM; return db.ref('boletins').push(boletim).then(() => { const numeroFormatado = String(novoNumeroBOPM).padStart(3, '0'); showFeedback(`Boletim BOPM Nº ${numeroFormatado} criado com sucesso!`); const logDescription = formatarDadosBoletimParaLog(boletim); enviarLogParaDiscord(`✅ Novo Boletim Criado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.SUCCESS); abrirLista(); }); }).catch(e => { console.error("Erro na transação do contador:", e); showFeedback('Erro crítico ao gerar número do boletim: ' + e.message, 'error'); }); }
+        function atualizarBoletim() { if (!document.getElementById('oficialResp').value.trim()) { showFeedback('O campo "Oficial responsável" é obrigatório.', 'error'); return; } const boletim = coletarDadosDoFormulario(); boletim.atualizadoEm = new Date().toISOString(); db.ref('boletins/' + boletimEmEdicaoId).update(boletim).then(() => { const boletimEditado = boletinsCache.find(b => b.id === boletimEmEdicaoId); const numeroFormatado = boletimEditado ? String(boletimEditado.numeroBOPM).padStart(3, '0') : `ID ${boletimEmEdicaoId}`; showFeedback('Boletim atualizado com sucesso!'); const logDescription = formatarDadosBoletimParaLog(boletim); enviarLogParaDiscord(`✏️ Boletim Editado - BOPM Nº ${numeroFormatado}`, logDescription, logColors.WARNING); abrirLista(); }).catch(e => showFeedback('Erro: ' + e.message, 'error')); }
         
         editarBoletim = function(id) { 
-            const b = boletinsCache.find(bo => bo.id === id); if (!b) return; 
-            abrirFormulario(false); boletimEmEdicaoId = id; 
+            const b = boletinsCache.find(bo => bo.id === id); 
+            if (!b) return; 
+            abrirFormulario(false); 
+            boletimEmEdicaoId = id; 
             document.getElementById('oficialResp').value = b.oficialResp || ''; 
             document.getElementById('oficiais').value = b.oficiais || ''; 
             document.getElementById('localEndereco').value = b.localEndereco || ''; 
             document.getElementById('localReferencia').value = b.localReferencia || ''; 
             document.getElementById('localData').value = b.localData || ''; 
             document.getElementById('relatoAgente').value = b.relatoAgente || ''; 
-            document.getElementById('vitimas').innerHTML = ''; if (b.vitimas) b.vitimas.forEach(v => addVitima(v)); 
-            document.getElementById('autores').innerHTML = ''; if (b.autores) b.autores.forEach(a => addAutor(a)); 
-            acusacoesSelecionadas = []; if (b.acusacoesSelecionadas) b.acusacoesSelecionadas.forEach(nome => { const ac = acusacoesDisponiveis.find(a => a.nome === nome); if (ac) acusacoesSelecionadas.push(ac); }); 
-            atualizarAcusaSelecionadas(); filtrarAcusacoesDisponiveis(); 
+            document.getElementById('vitimas').innerHTML = ''; 
+            if (b.vitimas) b.vitimas.forEach(v => addVitima(v)); 
+            document.getElementById('autores').innerHTML = ''; 
+            if (b.autores) b.autores.forEach(a => addAutor(a)); 
             document.getElementById('formSubmitButton').textContent = 'Atualizar Boletim'; 
-            const numeroFormatado = String(b.numeroBOPM).padStart(3, '0');
-            const titulo = b.numeroBOPM ? `Editando BOPM Nº ${numeroFormatado}` : `Editando Boletim ID: ${id}`;
-            document.getElementById('form-title').textContent = titulo;
+            const numeroFormatado = String(b.numeroBOPM).padStart(3, '0'); 
+            const titulo = b.numeroBOPM ? `Editando BOPM Nº ${numeroFormatado}` : `Editando Boletim ID: ${id}`; 
+            document.getElementById('form-title').textContent = titulo; 
         };
-
-        function excluirBoletim(id) {
-            if (confirm('Tem certeza que deseja excluir este boletim? Esta ação não pode ser desfeita.')) {
-                const boletimExcluido = boletinsCache.find(b => b.id === id);
-                db.ref('boletins/' + id).remove()
-                    .then(() => {
-                        showFeedback('Boletim excluído com sucesso!');
-                        if (boletimExcluido) {
-                            const numeroFormatado = String(boletimExcluido.numeroBOPM).padStart(3, '0');
-                            const logDescription = formatarDadosBoletimParaLog(boletimExcluido);
-                            enviarLogParaDiscord(`❌ Boletim Excluído - BOPM Nº ${numeroFormatado}`, logDescription, logColors.DANGER);
-                        } else {
-                            enviarLogParaDiscord(`❌ Boletim Excluído - ID ${id}`, "Não foi possível recuperar os dados completos do boletim para o log.", logColors.DANGER);
-                        }
-                    })
-                    .catch(error => showFeedback('Erro ao excluir o boletim: ' + error.message, 'error'));
-            }
-        }
-
-        function inicializarListenerBoletins() { db.ref('boletins').on('value', snapshot => { const data = snapshot.val() || {}; boletinsCache = Object.entries(data).map(([id, values]) => ({ id, ...values })); boletinsCache.sort((a, b) => (b.numeroBOPM || 0) - (a.numeroBOPM || 0)); if (document.getElementById('lista').style.display === 'block') renderizarBoletins(); }); }
         
-        function renderizarBoletins() {
-            const pesquisa = document.getElementById('pesquisa').value.toLowerCase();
-            const lista = document.getElementById('boletins'); lista.innerHTML = '';
-            const boletinsFiltrados = boletinsCache.filter(b => JSON.stringify(b).toLowerCase().includes(pesquisa));
-            if (boletinsFiltrados.length === 0) { lista.innerHTML = '<p style="text-align:center; padding: 20px;">Nenhum boletim encontrado.</p>'; return; }
+        function excluirBoletim(id) { if (confirm('Tem certeza que deseja excluir este boletim? Esta ação não pode ser desfeita.')) { const boletimExcluido = boletinsCache.find(b => b.id === id); db.ref('boletins/' + id).remove().then(() => { showFeedback('Boletim excluído com sucesso!'); if (boletimExcluido) { const numeroFormatado = String(boletimExcluido.numeroBOPM).padStart(3, '0'); const logDescription = formatarDadosBoletimParaLog(boletimExcluido); enviarLogParaDiscord(`❌ Boletim Excluído - BOPM Nº ${numeroFormatado}`, logDescription, logColors.DANGER); } else { enviarLogParaDiscord(`❌ Boletim Excluído - ID ${id}`, "Não foi possível recuperar os dados completos do boletim para o log.", logColors.DANGER); } }).catch(error => showFeedback('Erro ao excluir o boletim: ' + error.message, 'error')); } }
+        function inicializarListenerBoletins() { db.ref('boletins').on('value', snapshot => { const data = snapshot.val() || {}; boletinsCache = Object.entries(data).map(([id, values]) => ({ id, ...values })); boletinsCache.sort((a, b) => (b.numeroBOPM || 0) - (a.numeroBOPM || 0)); if (document.getElementById('lista').style.display === 'block') renderizarBoletins(); if (document.getElementById('tela-inicio').style.display === 'block') renderizarProcurados(); }); }
+        
+        function renderizarBoletins(boletimIdParaExpandir = null) {
+            const pesquisa = document.getElementById('pesquisa').value.toLowerCase().trim();
+            const lista = document.getElementById('boletins');
+            lista.innerHTML = '';
+            
+            const boletinsFiltrados = boletinsCache.filter(b => {
+                if (!pesquisa) return true;
+                const textosParaBuscar = [];
+                if (b.numeroBOPM) { textosParaBuscar.push(`bopm nº ${String(b.numeroBOPM).padStart(3, '0')}`); }
+                textosParaBuscar.push(b.oficialResp || '');
+                textosParaBuscar.push(b.oficiais || '');
+                textosParaBuscar.push(b.relatoAgente || '');
+                textosParaBuscar.push(b.localEndereco || '');
+                textosParaBuscar.push(b.localReferencia || '');
+                const todasAsPessoas = [...(b.vitimas || []), ...(b.autores || [])];
+                todasAsPessoas.forEach(p => {
+                    textosParaBuscar.push(p.nome || '');
+                    textosParaBuscar.push(p.nick || '');
+                    textosParaBuscar.push(p.cpf || '');
+                    textosParaBuscar.push(p.obs || '');
+                    if (p.acusacoes) { textosParaBuscar.push(p.acusacoes.map(ac => ac.nome).join(' ')); }
+                });
+                if (b.criadoEm) { textosParaBuscar.push(new Date(b.criadoEm).toLocaleString('pt-BR')); }
+                if (b.localData) { textosParaBuscar.push(new Date(b.localData).toLocaleString('pt-BR')); }
+                const textoCompleto = textosParaBuscar.join(' ').toLowerCase();
+                return textoCompleto.includes(pesquisa);
+            });
+            
+            if (boletinsFiltrados.length === 0) {
+                lista.innerHTML = '<p style="text-align:center; padding: 20px;">Nenhum boletim encontrado para sua busca.</p>';
+                return;
+            }
+
+            const hasManagerPermissions = usuarioLogado && ['Administrador', 'Owner', 'Oficial'].includes(usuarioLogado.categoria);
+            
             boletinsFiltrados.forEach(b => {
                 const item = document.createElement('div');
                 item.className = 'boletim';
                 const formatList = (arr, fields) => arr && arr.length ? arr.map(item => fields.map(f => item[f] || 'N/A').join(' - ')).join('<br>') : 'Nenhum';
                 const vitimasStr = formatList(b.vitimas, ['nome', 'idade', 'cpf']);
-                const autoresStr = formatList(b.autores, ['nome', 'idade', 'cpf']);
+                
+                const autoresHtml = b.autores && b.autores.length ? b.autores.map((autor, index) => { 
+                    const infoAutor = `${(autor.tipoParticipacao || 'Autor')}: ${['nome', 'idade', 'cpf'].map(f => autor[f] || 'N/A').join(' - ')}`;
+                    const acusacoesAutor = (autor.acusacoes || []).map(ac => ac.nome).join(', ') || 'Nenhuma acusação';
+                    const penaAutor = autor.penaMulta || 'Não calculada';
+                    
+                    let btnProcurado = '';
+                    if (hasManagerPermissions) { 
+                        const isProcurado = autor.procurado === true; 
+                        btnProcurado = `<button class="btn ${isProcurado ? 'btn-sucesso' : 'btn-aviso'}" onclick="toggleProcurado('${b.id}', ${index})">${isProcurado ? 'Remover de Procurado' : 'Marcar como Procurado'}</button>`; 
+                    } 
+                    return `
+                        <div class="autor-item-line" style="flex-direction: column; align-items: flex-start; margin-bottom: 10px; border-top: 1px solid #004080; padding-top: 10px;">
+                            <div style="display: flex; justify-content: space-between; width: 100%;">
+                               <span>${infoAutor}</span>
+                               ${btnProcurado}
+                            </div>
+                            <small style="color: #a0c8ff;"><strong>Acusações:</strong> ${acusacoesAutor}</small>
+                            <small style="color: #a0c8ff;"><strong>Pena:</strong> ${penaAutor}</small>
+                        </div>`;
+                }).join('') : 'Nenhum';
+
                 let deleteBtnHtml = '';
-                if (usuarioLogado && (usuarioLogado.categoria === 'Administrador' || usuarioLogado.categoria === 'Owner')) { deleteBtnHtml = `<button class="btn btn-perigo" onclick="excluirBoletim('${b.id}')">Excluir</button>`; }
+                if (hasManagerPermissions) { 
+                    deleteBtnHtml = `<button class="btn btn-perigo" onclick="excluirBoletim('${b.id}')">Excluir</button>`; 
+                }
                 const numeroFormatado = b.numeroBOPM ? String(b.numeroBOPM).padStart(3, '0') : 'S/N';
                 const tituloBoletim = `BOPM Nº ${numeroFormatado}`;
+                const deveExpandir = b.id === boletimIdParaExpandir;
+                const displayStyle = deveExpandir ? 'block' : 'none';
                 item.innerHTML = `
                     <div class="boletim-summary" onclick="toggleDetalhesBoletim(this.parentElement.querySelector('.boletim-botoes button'))">
                         <p><strong>Boletim:</strong> ${tituloBoletim}</p>
@@ -512,12 +733,11 @@
                         <p><strong>Acusado Principal:</strong> ${(b.autores && b.autores[0]?.nome) || 'N/A'}</p>
                         <p><strong>Data Registro:</strong> ${new Date(b.criadoEm).toLocaleString('pt-BR')}</p>
                     </div>
-                    <div class="boletim-details" style="display:none;">
+                    <div class="boletim-details" style="display:${displayStyle};">
                         <h4>Detalhes da Ocorrência</h4>
                         <p><strong>Oficiais Envolvidos:</strong> <pre>${b.oficiais || 'N/A'}</pre></p>
                         <p><strong>Vítimas:</strong> <pre>${vitimasStr}</pre></p>
-                        <p><strong>Autores:</strong> <pre>${autoresStr}</pre></p>
-                        <p><strong>Acusações:</strong> <pre>${(b.acusacoesSelecionadas || []).join(', ') || 'Nenhuma'}</pre></p>
+                        <p><strong>Autores:</strong> <pre style="padding: 0;">${autoresHtml}</pre></p>
                         <p><strong>Local:</strong> <pre>${b.localEndereco || 'N/A'}</pre></p>
                         <p><strong>Data do Fato:</strong> <pre>${b.localData ? new Date(b.localData).toLocaleString('pt-BR') : 'N/A'}</pre></p>
                         <p><strong>Relato do Agente:</strong> <pre>${b.relatoAgente || 'Nenhum relato fornecido.'}</pre></p>
@@ -528,10 +748,43 @@
                         ${deleteBtnHtml}
                     </div>`;
                 lista.appendChild(item);
+                if (deveExpandir) { item.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
             });
         }
-        
+
         function toggleDetalhesBoletim(button) { const boletimDiv = button.closest('.boletim'); const detailsDiv = boletimDiv.querySelector('.boletim-details'); const isHidden = detailsDiv.style.display === 'none'; detailsDiv.style.display = isHidden ? 'block' : 'none'; }
+        
+        function toggleProcurado(boletimId, autorIndex) { const boletimRef = db.ref(`boletins/${boletimId}`); boletimRef.once('value', snapshot => { const boletim = snapshot.val(); if (boletim && boletim.autores && boletim.autores[autorIndex]) { const isProcurado = !(boletim.autores[autorIndex].procurado === true); boletim.autores[autorIndex].procurado = isProcurado; boletimRef.update({ autores: boletim.autores }).then(() => { const nomeAutor = boletim.autores[autorIndex].nome; const acao = isProcurado ? 'marcado como procurado' : 'removido da lista de procurados'; showFeedback(`${nomeAutor} foi ${acao}.`); enviarLogParaDiscord('Status de Procurado Alterado', `O autor **${nomeAutor}** foi ${acao}.`, logColors.WARNING); }); } }); }
+
+        function renderizarProcurados() {
+            const container = document.getElementById('procurados-content');
+            container.innerHTML = '';
+            let encontrouProcurado = false;
+            boletinsCache.forEach(boletim => {
+                if (boletim.autores) {
+                    boletim.autores.forEach(autor => {
+                        if (autor.procurado === true) {
+                            encontrouProcurado = true;
+                            const item = document.createElement('div');
+                            item.className = 'procurado-item';
+                            item.innerHTML = `
+                                <span class="procurado-item-nome">${autor.nome || 'Nome não registrado'}</span>
+                                <button class="btn btn-neutro" onclick="verBoletimEspecifico('${boletim.id}')">Ver Boletim</button>
+                            `;
+                            container.appendChild(item);
+                        }
+                    });
+                }
+            });
+            if (!encontrouProcurado) { container.innerHTML = '<p>Nenhum indivíduo na lista de procurados no momento.</p>'; }
+        }
+        
+        function verBoletimEspecifico(boletimId) {
+            abrirLista(boletimId);
+        }
+
+        // [NOVO] Adiciona o listener de evento para o input de upload de imagem
+        document.getElementById('imagem-upload').addEventListener('change', handleImageUpload);
 
     </script>
 </body>
